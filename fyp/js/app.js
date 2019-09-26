@@ -53,30 +53,31 @@ angular.module("main").controller("mainController",mainController );
         'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
       };
       gapi.auth.signIn(params);
+
    }
 
    function login(){
 
      userService.login(vm.username, vm.password).then(function(resp){
-       if(resp.status == 'success') {
-         alert(resp.message);
-         $window.location.replace("http://localhost:8081/homePage.html");
+       if(resp.data.status == 'success') {
+         alert(resp.data.message);
+         $window.location.href = "/homePage.html";
        }
        else {
-         alert(resp.error);
+         alert(resp.data.error);
        }
      });
    }
 
    function signUp(){
      userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation).then(function(resp){
-       if(resp.status == 'success'){
+       if(resp.data.status == 'success'){
+         $window.location.href = "/homePage.html";
          localStorage.setItem("api_token", resp.api_token);
-         alert(resp.message);
-         $window.location.replace("http://localhost:8081/homePage.html");
+         alert(resp.data.message);
        }
        else{
-         alert(resp.error);
+         alert(resp.data.error);
        }
      });
    }
@@ -84,13 +85,13 @@ angular.module("main").controller("mainController",mainController );
    function logout(){
      var api_token = localStorage.getItem("api_token");
      userService.logout(api_token).then(function(resp){
-       if(resp.status == 'success'){
+       if(resp.data.status == 'success'){
          localStorage.removeItem("api_token");
-         alert(resp.message);
-         $window.location.replace("http://localhost:8081/sign-in.html");
+         alert(resp.data.message);
+         $window.location.href= "/sign-in.html";
        }
        else{
-         alert(resp.message);
+         alert(resp.data.message);
        }
      });
    }
