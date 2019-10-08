@@ -4,9 +4,7 @@ userController.$inject = ['$http', 'userService', '$window'];
 
 function userController($http, userService, $window){
 
-	var vm = this;
-
-	//variables
+  var vm = this;
   vm.username = '';
   vm.password = '';
   vm.firstName = '';
@@ -15,60 +13,85 @@ function userController($http, userService, $window){
   vm.password = '';
   vm.passwordConfirmation = '';
   vm.signedIn = false;
+  vm.gmail = {
+    username:'',
+    email:''
+  };
   //functions
-	vm.login = login;
-	vm.signUp = signUp;
-	vm.renderSignInButton = renderSignInButton;
+  vm.login = login;
+  vm.signUp = signUp;
+  vm.onGoogleLogin = onGoogleLogin;
 
+  function onLoadFunction (){
+    gapi.client.setApiKey('AIzaSyC7_U_Ugdo37Iibke1NjzdFSomANF2PeVk');
+    gapi.client.load('plus', 'v1', function (){})
+  }
 
-	function login(){
+  function onGoogleLogin(){
+    var params ={
+      'clientid': '694512838327-iffqdmvptpi100gecq493hle2djsrbun.apps.googleusercontent.com',
+      'cookiepolicy': 'single_host_origin',
+      'callback' : function(result){
+        if(result['status']['signed-in']){
+          var request = gapi.client.plus.people.get(
+            {
+              'userId' :'me'
+            }
+          );
+          request.execute(function(resp){
+            vm.$apply = function(){
+              vm.resp = resp;
+              vm.gmail.username =resp.displayName ;
+              vm.gmail.email = resp.emails[0].value;
+            }
+          })
+        }
+      },
+      'approvalprompt': 'force',
+      'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+    };
+    gapi.auth.signIn(params);
 
-		userService.login(vm.username, vm.password).then(function(resp){
-		  if(resp.status == 'success' || true) {
-        $window.location.replace("http://127.0.0.1:8081/homePage.html");
-        alert(resp.data);
+  }
+
+  function login(){
+
+    userService.login(vm.username, vm.password).then(function(resp){
+      if(resp.data.status == 'success') {
+        alert(resp.data.message);
+        $window.location.href = "/homePage.html";
       }
-		  else {
-		    alert(resp.data);
-      }
-		});
-	}
-
-	function signUp(){
-
-	  userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation).then(function(resp){
-	    if(resp.status == 'success'){
-        $window.location.replace("http://127.0.0.1:8081/homePage.html");
-        localStorage.setItem("key", resp.key);
-        alert(resp.data);
-      }
-	    else{
-	      alert(resp.data);
+      else {
+        alert(resp.data.error);
       }
     });
   }
 
-  function newEl() {
-    var po = document.createElement('script');
-    po.type = 'text/javascript';
-    po.async = true;
-    po.src = 'https://apis.google.com/js/client:plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  }
-
-  function renderSignInButton(){
-    gapi.signin.render('signInButton',
-      {
-        'callback': $scope.signInCallback, // Function handling the callback.
-        'clientid': '694512838327-iffqdmvptpi100gecq493hle2djsrbun.apps.googleusercontent.com', // CLIENT_ID from developer console which has been explained earlier.
-        'requestvisibleactions': 'http://schemas.google.com/AddActivity', // Visible actions, scope and cookie policy wont be described now,
-                                                                          // as their explanation is available in Google+ API Documentation.
-        'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
-        'cookiepolicy': 'single_host_origin'
+  function signUp(){
+    userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation).then(function(resp){
+      if(resp.data.status == 'success'){
+        $window.location.href = "/homePage.html";
+        localStorage.setItem("api_token", resp.api_token);
+        alert(resp.data.message);
       }
-    );
+      else{
+        alert(resp.data.error);
+      }
+    });
   }
 
-
+  function logout(){
+    var api_token = localStorage.getItem("api_token");
+    userService.logout(api_token).then(function(resp){
+      if(resp.data.status == 'success'){
+        localStorage.removeItem("api_token");
+        alert(resp.data.message);
+        $window.location.href= "/sign-in.html";
+      }
+      else{
+        alert(resp.data.message);
+      }
+    });
+  }
 
 }

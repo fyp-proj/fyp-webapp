@@ -4,9 +4,9 @@ angular.module("main",[]);
 angular.module("userModule",[]);
 angular.module("main").controller("mainController",mainController );
     // Controller body
- mainController.$inject=['$http', '$window', 'userService'];
+ mainController.$inject=['$http', '$window', 'userService', 'authorsProjectsService'];
 
- function mainController($http, $window, userService) {
+ function mainController($http, $window, userService, authorsProjectsService) {
    var vm = this;
    vm.username = '';
    vm.password = '';
@@ -20,11 +20,34 @@ angular.module("main").controller("mainController",mainController );
      username:'',
      email:''
    };
+   vm.totalItems = 15;
+   vm.currentPage = 1;
+   vm.itemsPerPage = 1;
+   vm.allAuhtors = [];
+   vm.allArticles = [];
+   vm.userProfile = null;
+   vm.toDate = '';
+   vm.fromDate = '';
+   vm.title = '';
+   vm.keywords = '';
+   vm.loadAuthors = false;
    //functions
    vm.login = login;
    vm.signUp = signUp;
+   vm.logout = logout;
    vm.onGoogleLogin = onGoogleLogin;
-
+   vm.getAllAuthors = getAllAuthors;
+   vm.getAllArticles = getAllArticles;
+   vm.viewProfile = viewProfile;
+   vm.searchArticles = searchArticles;
+   vm.pageChanged = pageChanged;
+   // vm.searchAuthors = searchAuthors;
+   vm.key = localStorage.getItem("apiToken");
+   if(vm.key) {
+     authorsProjectsService.getAllAuthors(vm.key, vm.currentPage).then(function (resp) {
+       vm.allAuthors = resp.data;
+     });
+   }
    function onLoadFunction (){
      gapi.client.setApiKey('AIzaSyC7_U_Ugdo37Iibke1NjzdFSomANF2PeVk');
      gapi.client.load('plus', 'v1', function (){})
@@ -53,6 +76,7 @@ angular.module("main").controller("mainController",mainController );
         'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
       };
       gapi.auth.signIn(params);
+      $window.location.href = "/homePage.html";
 
    }
 
@@ -72,8 +96,8 @@ angular.module("main").controller("mainController",mainController );
    function signUp(){
      userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation).then(function(resp){
        if(resp.data.status == 'success'){
+         localStorage.apiToken =  resp.data.api_token;
          $window.location.href = "/homePage.html";
-         localStorage.setItem("api_token", resp.api_token);
          alert(resp.data.message);
        }
        else{
@@ -83,10 +107,10 @@ angular.module("main").controller("mainController",mainController );
    }
 
    function logout(){
-     var api_token = localStorage.getItem("api_token");
-     userService.logout(api_token).then(function(resp){
+     var key = localStorage.getItem("apiToken");
+     userService.logOut(key).then(function(resp){
        if(resp.data.status == 'success'){
-         localStorage.removeItem("api_token");
+         localStorage.removeItem("apiToken");
          alert(resp.data.message);
          $window.location.href= "/sign-in.html";
        }
@@ -96,5 +120,47 @@ angular.module("main").controller("mainController",mainController );
      });
    }
 
+   function getAllAuthors (){
+     vm.loadAuthors = true;
+     authorsProjectsService.getAllAuthors(vm.currentPage).then(function(resp){
+        vm.allAuthors = resp.data;
+        vm.loadAuthors = false;
+     });
 
+   }
+
+   function getAllArticles(){
+     authorsProjectsService.getAllArticles(vm.currentPage).then(function(resp){
+        vm.allArticles = resp.data;
+     });
+   }
+
+   function viewProfile(userId){
+     authorsProjectsService.viewProfile(userId).then(function(resp){
+        vm.userProfile = resp.data;
+       $window.location.href= "/user-profile.html";
+     });
+   }
+
+   function searchArticles(){
+     var articleObj = {title: vm.title, keywords:vm.keywords, fromDate:vm.fromDate, toDate:vm.toDate};
+     authorsProjectsService.searchArticles(articleObj).then(function(resp){
+        vm.allArticles = resp.data;
+     });
+   }
+
+   // function searchAuthors(){
+   //   var key = localStorage.getItem("apiToken")
+   //   authorsProjectsService.searchAuthors(key).then(function(resp){
+   //
+   //   });
+   // }
+  function pageChanged (prev, page){
+     if(prev)
+       vm.currentPage--;
+     else vm.currentPage ++;
+     if(page)
+       vm.currentPage = page;
+     vm.getAllAuthors();
+  }
  }

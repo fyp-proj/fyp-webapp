@@ -31,9 +31,9 @@ function userService($http) {
 
   function logOut(api_token){
     return $http({
-      method: 'POST',
-      url: 'http://ec2-18-217-2-123.us-east-2.compute.amazonaws.com/api/v1/logout',
-      data: {api_token: api_token},
+      method: 'GET',
+      url: 'http://ec2-18-217-2-123.us-east-2.compute.amazonaws.com/api/v1/logout?api_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTU2OTE4MDk3OCwiZXhwIjoxNTY5MTg0NTc4LCJuYmYiOjE1NjkxODA5NzgsImp0aSI6IlZIS2JKWlZqZ2FJR2thUDgiLCJzdWIiOjEsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEifQ.H8CqMP5d3bM2AOXaKC7BZc0MgEMHLCC5REzBIp8K1ZI',
+      headers:{Authorization: "Bearer " + localStorage.getItem("apiToken")},
       headers: {'Content-Type': 'application/json',  'Access-Controle-Allow-Origin':'*',}
     });
   }
