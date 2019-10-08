@@ -31,6 +31,7 @@ angular.module("main").controller("mainController",mainController );
    vm.title = '';
    vm.keywords = '';
    vm.loadAuthors = false;
+   vm.loadArticles = false;
    //functions
    vm.login = login;
    vm.signUp = signUp;
@@ -44,9 +45,8 @@ angular.module("main").controller("mainController",mainController );
    // vm.searchAuthors = searchAuthors;
    vm.key = localStorage.getItem("apiToken");
    if(vm.key) {
-     authorsProjectsService.getAllAuthors(vm.key, vm.currentPage).then(function (resp) {
-       vm.allAuthors = resp.data;
-     });
+     vm.getAllAuthors();
+     vm.getAllArticles();
    }
    function onLoadFunction (){
      gapi.client.setApiKey('AIzaSyC7_U_Ugdo37Iibke1NjzdFSomANF2PeVk');
@@ -130,8 +130,10 @@ angular.module("main").controller("mainController",mainController );
    }
 
    function getAllArticles(){
+     vm.loadArticles = true;
      authorsProjectsService.getAllArticles(vm.currentPage).then(function(resp){
         vm.allArticles = resp.data;
+        vm.loadArticles = false;
      });
    }
 
@@ -143,9 +145,11 @@ angular.module("main").controller("mainController",mainController );
    }
 
    function searchArticles(){
+     vm.loadArticles = true;
      var articleObj = {title: vm.title, keywords:vm.keywords, fromDate:vm.fromDate, toDate:vm.toDate};
      authorsProjectsService.searchArticles(articleObj).then(function(resp){
         vm.allArticles = resp.data;
+        vm.loadArticles = false;
      });
    }
 
@@ -155,12 +159,15 @@ angular.module("main").controller("mainController",mainController );
    //
    //   });
    // }
-  function pageChanged (prev, page){
+  function pageChanged (prev, page, type){
      if(prev)
        vm.currentPage--;
      else vm.currentPage ++;
      if(page)
        vm.currentPage = page;
-     vm.getAllAuthors();
+     if(type == 'articles')
+       vm.getAllArticles();
+     else
+        vm.getAllAuthors();
   }
  }

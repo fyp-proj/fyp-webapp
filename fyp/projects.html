@@ -273,13 +273,12 @@
 							<div class="col-lg-9">
 								<div class="main-ws-sec">
 									<div class="posts-section">
-										<div class="post-bar">
+										<div class="post-bar" ng-repeat="article in ctrl.allArticles.data">
 											<div class="post_topbar">
 												<div class="usy-dt">
 													<img src="images/resources/us-pic.png" alt="">
 													<div class="usy-name">
 														<h3>John Doe</h3>
-														<span><img src="images/clock.png" alt="">3 min ago</span>
 													</div>
 												</div>
 												<div class="ed-opts">
@@ -293,33 +292,11 @@
 													</ul>
 												</div>
 											</div>
-											<div class="epi-sec">
-												<ul class="descp">
-													<li><img src="images/icon8.png" alt=""><span>Front End Developer</span></li>
-													<li><img src="images/icon9.png" alt=""><span>India</span></li>
-												</ul>
-												<ul class="bk-links">
-													<li><a href="#" title=""><i class="la la-bookmark"></i></a></li>
-													<li><a href="#" title=""><i class="la la-envelope"></i></a></li>
-													<li><a href="#" title="" class="bid_now">Bid Now</a></li>
-												</ul>
-											</div>
+                      <div>
+                        <span ng-bind="article.date" ng-if="article.date != 'ND'"></span>
+                      </div>
 											<div class="job_descp">
-												<h3>Simple Classified Site</h3>
-												<ul class="job-dt">
-													<li><span>$300 - $350</span></li>
-												</ul>
-												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at. Etiam id magna sit amet... <a href="#" title="">view more</a></p>
-												<ul class="skill-tags">
-													<li><a href="#" title="">HTML</a></li>
-													<li><a href="#" title="">PHP</a></li>
-													<li><a href="#" title="">CSS</a></li>
-													<li><a href="#" title="">Javascript</a></li>
-													<li><a href="#" title="">Wordpress</a></li>
-													<li><a href="#" title="">Photoshop</a></li>
-													<li><a href="#" title="">Illustrator</a></li>
-													<li><a href="#" title="">Corel Draw</a></li>
-												</ul>
+												<p ng-bind="article.title">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at. Etiam id magna sit amet... <a href="#" title="">view more</a></p>
 											</div>
 											<div class="job-status-bar">
 												<ul class="like-com">
@@ -333,7 +310,7 @@
 												<a href="#"><i class="fas fa-eye"></i>Views 50</a>
 											</div>
 										</div><!--post-bar end-->
-										<div class="process-comm">
+										<div class="process-comm" ng-if="ctrl.loadArticles">
 											<div class="spinner">
 												<div class="bounce1"></div>
 												<div class="bounce2"></div>
@@ -348,12 +325,12 @@
 				</div>
 			</div>
 		</main>
-    <div style="font-size: 16px;margin-left: 450px;margin-top:30px;">
-      <button ng-if="ctrl.currentPage>1" style="padding:5px;" class="follow" ng-click="ctrl.pageChanged(true, 1)">first page</button>
-      <button ng-if="ctrl.currentPage>1" style="padding:5px;" class="follow" ng-click="ctrl.pageChanged(true)">previous page</button>
-      <span>Page <span ng-bind="ctrl.currentPage"></span> of <span ng-bind="ctrl.allAuthors.pagination.total_pages"></span> </span>
-      <button ng-if="ctrl.currentPage < ctrl.allAuthors.pagination.total_pages" style="padding:5px;" class="hire" ng-click="ctrl.pageChanged(false)">next page</button>
-      <button ng-if="ctrl.currentPage != ctrl.allAuthors.pagination.total_pages" style="padding:5px;" class="hire" ng-click="ctrl.pageChanged(false, ctrl.allAuthors.pagination.total_pages)">last page</button>
+    <div style="font-size: 16px;margin-left: 450px;margin-top:30px;margin-bottom:20px;">
+      <button ng-if="ctrl.currentPage>1" style="padding:5px;" class="follow" ng-click="ctrl.pageChanged(true, 1, 'articles')">first page</button>
+      <button ng-if="ctrl.currentPage>1" style="padding:5px;" class="follow" ng-click="ctrl.pageChanged(true, null, 'articles')">previous page</button>
+      <span>Page <span ng-bind="ctrl.currentPage"></span> of <span ng-bind="ctrl.allArticles.pagination.total_pages"></span> </span>
+      <button ng-if="ctrl.currentPage < ctrl.allArticles.pagination.total_pages" style="padding:5px;" class="hire" ng-click="ctrl.pageChanged(false, null, 'articles')">next page</button>
+      <button ng-if="ctrl.currentPage != ctrl.allArticles.pagination.total_pages" style="padding:5px;" class="hire" ng-click="ctrl.pageChanged(false, ctrl.allArticles.pagination.total_pages, 'articles')">last page</button>
     </div>
 	</div><!--theme-layout end-->
 
