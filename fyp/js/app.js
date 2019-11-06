@@ -1,7 +1,6 @@
-angular.module("App",['main', 'userModule']);
+angular.module("App",['main']);
 
 angular.module("main",[]);
-angular.module("userModule",[]);
 angular.module("main").controller("mainController",mainController );
     // Controller body
  mainController.$inject=['$http', '$window', 'userService', 'authorsProjectsService'];
@@ -20,34 +19,15 @@ angular.module("main").controller("mainController",mainController );
      username:'',
      email:''
    };
-   vm.totalItems = 15;
-   vm.currentPage = 1;
-   vm.itemsPerPage = 1;
-   vm.allAuhtors = [];
-   vm.allArticles = [];
-   vm.userProfile = null;
-   vm.toDate = '';
-   vm.fromDate = '';
-   vm.title = '';
-   vm.keywords = '';
-   vm.loadAuthors = false;
-   vm.loadArticles = false;
+
    //functions
    vm.login = login;
    vm.signUp = signUp;
    vm.logout = logout;
    vm.onGoogleLogin = onGoogleLogin;
-   vm.getAllAuthors = getAllAuthors;
-   vm.getAllArticles = getAllArticles;
-   vm.viewProfile = viewProfile;
-   vm.searchArticles = searchArticles;
-   vm.pageChanged = pageChanged;
-   // vm.searchAuthors = searchAuthors;
+
    vm.key = localStorage.getItem("apiToken");
-   if(vm.key) {
-     vm.getAllAuthors();
-     vm.getAllArticles();
-   }
+
    function onLoadFunction (){
      gapi.client.setApiKey('AIzaSyC7_U_Ugdo37Iibke1NjzdFSomANF2PeVk');
      gapi.client.load('plus', 'v1', function (){})
@@ -75,7 +55,7 @@ angular.module("main").controller("mainController",mainController );
         'approvalprompt': 'force',
         'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
       };
-      gapi.auth.signIn(params);
+      gapi.auth.signIn(params); //use new api from moustafa
       $window.location.href = "/homePage.html";
 
    }
@@ -119,55 +99,4 @@ angular.module("main").controller("mainController",mainController );
        }
      });
    }
-
-   function getAllAuthors (){
-     vm.loadAuthors = true;
-     authorsProjectsService.getAllAuthors(vm.currentPage).then(function(resp){
-        vm.allAuthors = resp.data;
-        vm.loadAuthors = false;
-     });
-
-   }
-
-   function getAllArticles(){
-     vm.loadArticles = true;
-     authorsProjectsService.getAllArticles(vm.currentPage).then(function(resp){
-        vm.allArticles = resp.data;
-        vm.loadArticles = false;
-     });
-   }
-
-   function viewProfile(userId){
-     authorsProjectsService.viewProfile(userId).then(function(resp){
-        vm.userProfile = resp.data;
-       $window.location.href= "/user-profile.html";
-     });
-   }
-
-   function searchArticles(){
-     vm.loadArticles = true;
-     var articleObj = {title: vm.title, keywords:vm.keywords, fromDate:vm.fromDate, toDate:vm.toDate};
-     authorsProjectsService.searchArticles(articleObj).then(function(resp){
-        vm.allArticles = resp.data;
-        vm.loadArticles = false;
-     });
-   }
-
-   // function searchAuthors(){
-   //   var key = localStorage.getItem("apiToken")
-   //   authorsProjectsService.searchAuthors(key).then(function(resp){
-   //
-   //   });
-   // }
-  function pageChanged (prev, page, type){
-     if(prev)
-       vm.currentPage--;
-     else vm.currentPage ++;
-     if(page)
-       vm.currentPage = page;
-     if(type == 'articles')
-       vm.getAllArticles();
-     else
-        vm.getAllAuthors();
-  }
  }

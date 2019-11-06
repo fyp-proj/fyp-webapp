@@ -22,7 +22,7 @@
 </head>
 
 
-<body ng-controller="mainController as ctrl">
+<body ng-controller="authorController as ctrl">
 	<div class="wrapper">
 		<header>
 			<div class="container">
@@ -223,7 +223,7 @@
 								<li><a href="#" title="">Faqs</a></li>
 								<li><a href="#" title="">Terms & Conditions</a></li>
 							</ul>
-							<h3 class="tc"><a href="sign-in.html" title="">Logout</a></h3>
+							<h3 class="tc"><a ng-click="ctrl.logout()" title="">Logout</a></h3>
 						</div><!--user-account-settingss end-->
 					</div>
 				</div><!--header-data end-->
@@ -249,7 +249,7 @@
 										</div><!--user-pro-img end-->
 										<div class="user_pro_status">
 											<ul class="flw-hr">
-												<li><a href="#" title="" class="flww"><i class="la la-plus"></i> Follow</a></li>
+												<li><a  title="" ng-click="ctrl.getAllArticles()" class="flww"><i class="la la-plus"></i> Follow</a></li>
 												<li><a href="#" title="" class="hre">Hire</a></li>
 											</ul>
 										</div><!--user_pro_status end-->
@@ -282,20 +282,20 @@
 													<a href="#" title="">
 														<img src="images/ic3.png" alt="">
 														<span>Portfolio</span>
-													</a>
+                          </a>
 												</li>
 											</ul>
 										</div><!-- tab-feed end-->
 									</div><!--user-tab-sec end-->
-									<div class="product-feed-tab current" style="width:800px !important;" id="feed-dd" ng-repeat="article in ctrl.userProfile.data.articles">
-										<div class="posts-section">
+									<div class="product-feed-tab current" style="width:800px !important;" id="feed-dd">
+                    <div class="posts-section">
 											<div class="post-bar">
 												<div class="post_topbar">
 													<div class="usy-dt">
-														<img src="images/resources/us-pic.png" alt="">
 														<div class="usy-name">
-															<h3>John Doe</h3>
-															<span><img src="images/clock.png" alt="">3 min ago</span>
+															<h3 ng-bind="ctrl.userProfile.data.firstName+ ' ' + ctrl.userProfile.data.lastName"></h3>
+                              <span ng-bind="ctrl.userProfile.data.email"></span>
+                              <span ng-bind="ctrl.userProfile.data.institution"></span>
 														</div>
 													</div>
 													<div class="ed-opts">
@@ -309,24 +309,15 @@
 														</ul>
 													</div>
 												</div>
-												<div class="epi-sec">
-													<ul class="descp">
-														<li><img src="images/icon8.png" alt=""><span>Epic Coder</span></li>
-														<li><img src="images/icon9.png" alt=""><span>India</span></li>
-													</ul>
-													<ul class="bk-links">
-														<li><a href="#" title=""><i class="la la-bookmark"></i></a></li>
-														<li><a href="#" title=""><i class="la la-envelope"></i></a></li>
-														<li><a href="#" title="" class="bid_now">Bid Now</a></li>
-													</ul>
-												</div>
 												<div class="job_descp">
-													<h3>Ios Shopping mobile app</h3>
-													<ul class="job-dt">
-														<li><span>$300 - $350</span></li>
-													</ul>
-													<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at. Etiam id magna sit amet... <a href="#" title="">view more</a></p>
-												</div>
+                            <span ng-repeat="art in ctrl.userProfile.data.articles">
+                              <span ng-bind="art.title"></span>
+                              <span>BR Name</span>
+                              <p ng-bind="art.br.name"></p>
+                              <span>Country</span>
+                              <p ng-bind="art.br.country"></p>
+												    </span>
+                        </div>
 												<div class="job-status-bar">
 													<ul class="like-com">
 														<li>
@@ -339,13 +330,7 @@
 													<a href="#"><i class="fas fa-eye"></i>Views 50</a>
 												</div>
 											</div><!--post-bar end-->
-											<div class="process-comm">
-												<div class="spinner">
-													<div class="bounce1"></div>
-													<div class="bounce2"></div>
-													<div class="bounce3"></div>
-												</div>
-											</div><!--process-comm end-->
+											<!--process-comm end-->
 										</div><!--posts-section end-->
 									</div><!--product-feed-tab end-->
 									<div class="product-feed-tab" id="info-dd">
@@ -485,6 +470,6 @@
 <script type="text/javascript" src="js/controllers/user.controller.js"></script>
 <script type="text/javascript" src="js/services/user.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
-
+  <script type="text/javascript" src="js/controllers/authors.controller.js"></script>
 </body>
 </html>

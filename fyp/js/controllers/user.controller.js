@@ -1,4 +1,4 @@
-angular.module('userModule').controller('userController',userController);
+ angular.module('userModule').controller('userController',userController);
 
 userController.$inject = ['$http', 'userService', '$window'];
 

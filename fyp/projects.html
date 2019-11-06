@@ -24,7 +24,7 @@
 </head>
 
 
-<body ng-controller="mainController as ctrl">
+<body ng-controller="authorsArticlesController as ctrl">
 
 	<div class="wrapper">
 
@@ -34,12 +34,6 @@
 					<div class="logo">
 						<a href="homePage.html" title=""><img src="images/logo.png" alt=""></a>
 					</div><!--logo end-->
-					<div class="search-bar">
-						<form>
-							<input type="text" name="search" placeholder="Search...">
-							<button type="submit"><i class="la la-search"></i></button>
-						</form>
-					</div><!--search-bar end-->
 					<nav>
 						<ul>
 							<li>
@@ -280,8 +274,13 @@
 													<div class="usy-name">
 														<h3>John Doe</h3>
 													</div>
+													<div style="clear:both;padding-top: 10px;" ng-init="ctrl.showColl = false;"><a style="padding: 5px;display: flex;width: 100px;" ng-click="ctrl.showCollaborators(article.id);ctrl.showColl = true;" class="follow">Show Collabortors</a></div>
+													<span ng-if="ctrl.showColl" style="font-weight:bold;"> Collaborators: </span>
+													<span ng-if="ctrl.showColl" ng-repeat="col in ctrl.collaborators.data">
+														<span ng-bind="col.firstName + ' ' + col.lastName"></span>,&nbsp
+													</span>
 												</div>
-												<div class="ed-opts">
+												<!-- <div class="ed-opts">
 													<a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
 													<ul class="ed-options">
 														<li><a href="#" title="">Edit Post</a></li>
@@ -290,14 +289,16 @@
 														<li><a href="#" title="">Close</a></li>
 														<li><a href="#" title="">Hide</a></li>
 													</ul>
-												</div>
+												</div> -->
 											</div>
                       <div>
                         <span ng-bind="article.date" ng-if="article.date != 'ND'"></span>
                       </div>
-											<div class="job_descp">
-												<p ng-bind="article.title">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at. Etiam id magna sit amet... <a href="#" title="">view more</a></p>
-											</div>
+											<div class="job_descp" style="margin-top: 10px;">
+												<a>Article Name: <p ng-click="ctrl.openGoogleScholar(article.title)" ng-bind="article.title"></p></a>
+                        <a>BR Country: <p ng-bind="article.br.country"></p></a>
+                        <a>BR Name: <p ng-click="ctrl.openRdata(article.br.name)" ng-bind="article.br.name"></p></a>
+                    </div>
 											<div class="job-status-bar">
 												<ul class="like-com">
 													<li>
@@ -349,8 +350,10 @@
 <script type="text/javascript" src="lib/slick/slick.min.js"></script>
 <script type="text/javascript" src="js/scrollbar.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
-<script type="text/javascript" src="js/controllers/user.controller.js"></script>
+<script type="text/javascript" src="js/controllers/authors-articles.controller.js"></script>
 <script type="text/javascript" src="js/services/user.service.js"></script>
+<script type="text/javascript" src="js/controllers/home.controller.js"></script>
+<script type="text/javascript" src="js/services/home.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
 </body>
 </html>

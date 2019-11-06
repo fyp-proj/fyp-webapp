@@ -10,6 +10,9 @@ function authorsProjectsService($http) {
   service.getAllArticles = getAllArticles;
   service.viewProfile = viewProfile;
   service.searchArticles = searchArticles;
+  service.searchAuthors = searchAuthors;
+  service.sendEmail = sendEmail;
+  service.showCollaborators = showCollaborators;
 
 
 
@@ -17,7 +20,7 @@ function authorsProjectsService($http) {
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-18-217-2-123.us-east-2.compute.amazonaws.com/api/v1/authors/all?page='+page
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/all?page='+page
     });
   }
 
@@ -25,7 +28,7 @@ function authorsProjectsService($http) {
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-18-217-2-123.us-east-2.compute.amazonaws.com/api/v1/articles/all?page='+page
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/articles/all?page='+page
     });
   }
 
@@ -33,15 +36,41 @@ function authorsProjectsService($http) {
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-18-217-2-123.us-east-2.compute.amazonaws.com/api/v1/authors/info/'+id
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/info/'+id
     });
   }
-  function searchArticles(artileObj){
+  function searchArticles(articleObj){
     return $http({
       method: 'POST',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      data: artileObj,
-      url: 'http://ec2-18-217-2-123.us-east-2.compute.amazonaws.com/api/v1/articles/search'
+      data: articleObj,
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/articles/search'
+    });
+  }
+
+  function searchAuthors(q, page){
+    var res = encodeURI(q);
+    return $http({
+      method: 'GET',
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/search?q='+res+'&page=' + page
+    });
+  }
+
+  function sendEmail(id, emailObj){
+    return $http({
+      method: 'POST',
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      data: emailObj,
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/email/send/'+id
+    });
+  }
+
+  function showCollaborators(articleId){
+    return $http({
+      method: 'GET',
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/collaborators/'+articleId
     });
   }
 }
