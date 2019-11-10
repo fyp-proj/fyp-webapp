@@ -65,6 +65,8 @@ angular.module("main").controller("mainController",mainController );
      userService.login(vm.username, vm.password).then(function(resp){
        if(resp.data.status == 'success') {
          alert(resp.data.message);
+         localStorage.apiToken =  resp.data.api_token;
+         localStorage.userId =  resp.data.user.id;
          $window.location.href = "/homePage.html";
        }
        else {
@@ -77,6 +79,7 @@ angular.module("main").controller("mainController",mainController );
      userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation).then(function(resp){
        if(resp.data.status == 'success'){
          localStorage.apiToken =  resp.data.api_token;
+         localStorage.userId =  resp.data.user.id;
          $window.location.href = "/homePage.html";
          alert(resp.data.message);
        }

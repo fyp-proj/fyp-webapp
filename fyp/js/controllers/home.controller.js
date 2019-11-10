@@ -1,8 +1,8 @@
 angular.module('main').controller('homeController',homeController);
 
-homeController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'homeService'];
+homeController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'homeService', 'userService'];
 
-function homeController($http, $window, authorsProjectsService, $location, homeService){
+function homeController($http, $window, authorsProjectsService, $location, homeService, userService){
 
 	var vm = this;
 
@@ -26,10 +26,15 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.filterFunction = filterFunction;
 	vm.myFunction = myFunction;
 	vm.getAuthors = getAuthors;
+	vm.logout = logout;
 
 	function initPage(){
 	    vm.loadNewsFeed();
 	    vm.getAuthors();
+	    vm.accountUserId = localStorage.getItem("userId");
+	    authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
+        	vm.userProfile = resp.data.data;
+    	});
   	}
 
   	function myFunction() {
@@ -89,6 +94,20 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 			vm.newsFeed = resp.data.data;
 		});
 	}
+
+	function logout(){
+     var key = localStorage.getItem("apiToken");
+     userService.logOut(key).then(function(resp){
+       if(resp.data.status == 'success'){
+         localStorage.removeItem("apiToken");
+         alert(resp.data.message);
+         $window.location.href= "/sign-in.html";
+       }
+       else{
+         alert(resp.data.message);
+       }
+     });
+   }
 
 	initPage();
 }

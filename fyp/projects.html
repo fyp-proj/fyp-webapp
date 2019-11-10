@@ -64,8 +64,8 @@
 									Profiles
 								</a>
 								<ul>
-									<li><a href="user-profile.html" title="">User Profile</a></li>
-									<li><a href="my-profile-feed.html" title="">my-profile-feed</a></li>
+									<li><a href="user-profile.html?userId={{ctrl.accountUserId}}" title="">User Profile</a></li>
+									<!-- <li><a href="my-profile-feed.html" title="">my-profile-feed</a></li> -->
 								</ul>
 							</li>
 							<li>
@@ -75,52 +75,11 @@
 								</a>
 							</li>
 							<li>
-								<a href="#" title="" class="not-box-openm">
-									<span><img src="images/icon6.png" alt=""></span>
-									Messages
-								</a>
-								<div class="notification-box msg" id="message">
-									<div class="nt-title">
-										<h4>Setting</h4>
-										<a href="#" title="">Clear all</a>
-									</div>
-									<div class="nott-list">
-										<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img1.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a> </h3>
-							  					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img2.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a></h3>
-							  					<p>Lorem ipsum dolor sit amet.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img3.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a></h3>
-							  					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempo incididunt ut labore et dolore magna aliqua.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="view-all-nots">
-						  					<a href="messages.html" title="">View All Messsages</a>
-						  				</div>
-									</div><!--nott-list end-->
-								</div><!--notification-box end-->
-							</li>
+				              <a href="messages.html" title="">
+				                <span><img src="images/icon6.png" alt=""></span>
+				                Messages
+				              </a>
+				            </li>
 							<li>
 								<a href="#" title="" class="not-box-open">
 									<span><img src="images/icon7.png" alt=""></span>
@@ -182,7 +141,7 @@
 					<div class="user-account">
 						<div class="user-info">
 							<img src="images/resources/user.png" alt="">
-							<a href="#" title="">John</a>
+							<a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
@@ -221,7 +180,7 @@
 								<li><a href="#" title="">Faqs</a></li>
 								<li><a href="#" title="">Terms & Conditions</a></li>
 							</ul>
-							<h3 class="tc"><a href="sign-in.html" title="">Logout</a></h3>
+							<h3 class="tc"><a ng-click="ctrl.logout()" title="">Logout</a></h3>
 						</div><!--user-account-settingss end-->
 					</div>
 				</div><!--header-data end-->
@@ -229,11 +188,12 @@
 		</header><!--header end-->
 
 		<div class="search-sec">
-			<div class="container">
+			<div class="container" style="width: 60%;" ng-init="ctrl.showAdvancedSearch = false;">
 				<div class="search-box">
 					<form>
-						<input type="text" name="search" placeholder="Search keywords">
-						<button type="submit">Search</button>
+						<input type="text" name="search" ng-model="ctrl.keyword" placeholder="Search keywords">
+						<button style="margin-right: 188px;" ng-click="ctrl.searchArticles()" type="submit">Search</button>
+						<button ng-click="ctrl.showAdvancedSearch = !ctrl.showAdvancedSearch" type="submit">Advanced Search</button>
 					</form>
 				</div><!--search-box end-->
 			</div>
@@ -245,23 +205,23 @@
 				<div class="container">
 					<div class="main-section-data">
 						<div class="row">
-							<div class="col-lg-3">
+							<div class="col-lg-3" ng-if="ctrl.showAdvancedSearch">
 								<div class="filter-secs">
 									<div class="filter-heading">
 										<h3>Search</h3>
 									</div><!--filter-heading end-->
 									<form action="ctrl.submit()">
-                    <div class="paddy">
-                      <div class="filter-dd">
-                        <input style="margin-bottom:10px;" ng-model="ctrl.title" type="text" name="articleName" placeholder="Article's Name">
-                        <input style="margin-bottom:10px;" ng-model="ctrl.keywords" type="text" name="keywords" placeholder="keywords ex:Nature...">
-                        <input style="margin-bottom:10px;" placeholder="from Date yyyy" ng-model="ctrl.fromDate"/>
-                        <input placeholder="to Date yyyy" ng-model="ctrl.toDate"/>
-                      </div>
+					                    <div class="paddy">
+					                      <div class="filter-dd">
+					                        <input style="margin-bottom:10px;" ng-model="ctrl.title" type="text" name="articleName" placeholder="Article's Name">
+					                        <input style="margin-bottom:10px;" ng-model="ctrl.keywords" type="text" name="keywords" placeholder="keywords ex:Nature...">
+					                        <input style="margin-bottom:10px;" placeholder="from Date yyyy" ng-model="ctrl.fromDate"/>
+					                        <input placeholder="to Date yyyy" ng-model="ctrl.toDate"/>
+					                      </div>
 
-                    </div>
-                    <input class="bid_now" type="button" ng-click="ctrl.searchArticles()" value="search" style="margin: 10px 0px 10px 90px;"/>
-                  </form>
+					                    </div>
+					                    <input class="bid_now" type="button" ng-click="ctrl.advancedSearchArticles()" value="search" style="margin: 10px 0px 10px 90px;"/>
+				                  	</form>
 								</div><!--filter-secs end-->
 							</div>
 							<div class="col-lg-9">
@@ -274,7 +234,7 @@
 													<div class="usy-name">
 														<h3>John Doe</h3>
 													</div>
-													<div style="clear:both;padding-top: 10px;" ng-init="ctrl.showColl = false;"><a style="padding: 5px;display: flex;width: 100px;" ng-click="ctrl.showCollaborators(article.id);ctrl.showColl = true;" class="follow">Show Collabortors</a></div>
+													<div style="clear:both;padding-top: 10px;" ng-init="ctrl.showColl = false;"><a style="padding: 5px;display: flex;width: 100px;" ng-click="ctrl.showCollaborators(article.id);ctrl.showColl = true;" class="follow">Show Collaborators</a></div>
 													<span ng-if="ctrl.showColl" style="font-weight:bold;"> Collaborators: </span>
 													<span ng-if="ctrl.showColl" ng-repeat="col in ctrl.collaborators.data">
 														<span ng-bind="col.firstName + ' ' + col.lastName"></span>,&nbsp
@@ -297,7 +257,7 @@
 											<div class="job_descp" style="margin-top: 10px;">
 												<a>Article Name: <p ng-click="ctrl.openGoogleScholar(article.title)" ng-bind="article.title"></p></a>
                         <a>BR Country: <p ng-bind="article.br.country"></p></a>
-                        <a>BR Name: <p ng-click="ctrl.openRdata(article.br.name)" ng-bind="article.br.name"></p></a>
+                        <a>BR Name: <p ng-bind="article.br.name"></p></a>
                     </div>
 											<div class="job-status-bar">
 												<ul class="like-com">
@@ -338,10 +298,6 @@
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script type="text/javascript" src="./node_modules/angular/angular.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-<script src="https://code.angularjs.org/1.4.7/angular-animate.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/popper.js"></script>
@@ -350,9 +306,11 @@
 <script type="text/javascript" src="lib/slick/slick.min.js"></script>
 <script type="text/javascript" src="js/scrollbar.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
-<script type="text/javascript" src="js/controllers/authors-articles.controller.js"></script>
-<script type="text/javascript" src="js/services/user.service.js"></script>
+<script type="text/javascript" src="js/controllers/user.controller.js"></script>
 <script type="text/javascript" src="js/controllers/home.controller.js"></script>
+<script type="text/javascript" src="js/controllers/authors-articles.controller.js"></script>
+<script type="text/javascript" src="js/controllers/authors.controller.js"></script>
+<script type="text/javascript" src="js/services/user.service.js"></script>
 <script type="text/javascript" src="js/services/home.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
 </body>

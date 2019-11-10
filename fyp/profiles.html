@@ -73,8 +73,8 @@
 									Profiles
 								</a>
 								<ul>
-									<li><a href="user-profile.html" title="">User Profile</a></li>
-									<li><a href="my-profile-feed.html" title="">my-profile-feed</a></li>
+									<li><a href="user-profile.html?userId={{ctrl.accountUserId}}" title="">User Profile</a></li>
+									<!-- <li><a href="my-profile-feed.html" title="">my-profile-feed</a></li> -->
 								</ul>
 							</li>
 							<li>
@@ -84,51 +84,10 @@
 								</a>
 							</li>
 							<li>
-								<a href="#" title="" class="not-box-openm">
+								<a href="messages.html" title="" class="not-box-openm">
 									<span><img src="images/icon6.png" alt=""></span>
 									Messages
 								</a>
-								<div class="notification-box msg" id="message">
-									<div class="nt-title">
-										<h4>Setting</h4>
-										<a href="#" title="">Clear all</a>
-									</div>
-									<div class="nott-list">
-										<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img1.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a> </h3>
-							  					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img2.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a></h3>
-							  					<p>Lorem ipsum dolor sit amet.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img3.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a></h3>
-							  					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempo incididunt ut labore et dolore magna aliqua.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="view-all-nots">
-						  					<a href="messages.html" title="">View All Messsages</a>
-						  				</div>
-									</div><!--nott-list end-->
-								</div><!--notification-box end-->
 							</li>
 							<li>
 								<a href="#" title="" class="not-box-open">
@@ -191,7 +150,7 @@
 					<div class="user-account">
 						<div class="user-info">
 							<img src="images/resources/user.png" alt="">
-							<a href="#" title="">John</a>
+							<a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
@@ -237,8 +196,6 @@
 			</div>
 		</header><!--header end-->
 
-<a class="post-jb active message-us" ng-click="" href="#" title="">send email</a>
-
 <section class="companies-info">
   <div class="container">
     <div class="company-title">
@@ -266,17 +223,18 @@
                 </li> -->
                 <!-- <li ><a class="message-us post-jb active" ng-click="" href="#" title="">send email</a>
                 </li> -->
-                <li><a class="post-jb active message-us " my-cool-directive ng-click="ctrl.recipientId = profile.id" href="" title="">send email</a></li>
+                <li id="test{{$index}}"><a class="post-jb active message-us" ng-click="ctrl.recipientId = profile.id" href="" title="">send email</a>
+                </li>
                 <li><a href="#" title="" class="hire-us">Hire</a></li>
               </ul>
             </div>
-            <a  ng-click="ctrl.viewProfile(profile.id)" title="" class="view-more-pro">View Profile</a>
+            <a href="my-profile-feed.html?userId={{profile.id}}" title="" class="view-more-pro">View Profile</a>
           </div><!--company_profile_info end-->
         </div>
       </div>
     </div>
   </div>
-  <div class="post-popup job_post">
+  <div class="post-popup job_post ">
     <div class="post-project">
       <h3>Post an Article</h3>
       <div class="post-project-fields">
@@ -286,7 +244,7 @@
               <input type="text" name="title" placeholder="Title" ng-model="ctrl.emailSubject">
             </div>
             <div class="col-lg-12">
-              <textarea name="message" placeholder="Message" ng-model="ctr.emailMessage"></textarea>
+              <textarea name="message" placeholder="Message" ng-model="ctrl.emailMessage"></textarea>
             </div>
             <div class="col-lg-12">
               <ul>
@@ -324,10 +282,6 @@
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script type="text/javascript" src="./node_modules/angular/angular.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-<script src="https://code.angularjs.org/1.4.7/angular-animate.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.js"></script>
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>-->
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/popper.js"></script>
@@ -336,10 +290,12 @@
 <script type="text/javascript" src="lib/slick/slick.min.js"></script>
 <script type="text/javascript" src="js/scrollbar.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
-<script type="text/javascript" src="js/controllers/authors-articles.controller.js"></script>
-<script type="text/javascript" src="js/services/user.service.js"></script>
+<script type="text/javascript" src="js/controllers/user.controller.js"></script>
 <script type="text/javascript" src="js/controllers/home.controller.js"></script>
-<script type="text/javascript" src="js/services/home.service.js"></script></body>
+<script type="text/javascript" src="js/controllers/authors-articles.controller.js"></script>
+<script type="text/javascript" src="js/controllers/authors.controller.js"></script>
+<script type="text/javascript" src="js/services/user.service.js"></script>
+<script type="text/javascript" src="js/services/home.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
 
 </body>

@@ -10,9 +10,13 @@ function authorsProjectsService($http) {
   service.getAllArticles = getAllArticles;
   service.viewProfile = viewProfile;
   service.searchArticles = searchArticles;
+  service.advancedSearchArticles = advancedSearchArticles;
   service.searchAuthors = searchAuthors;
   service.sendEmail = sendEmail;
   service.showCollaborators = showCollaborators;
+  service.getAuthorCollaborators = getAuthorCollaborators;
+  service.getMessages = getMessages;
+  service.sendMessages = sendMessages;
 
 
 
@@ -39,12 +43,21 @@ function authorsProjectsService($http) {
       url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/info/'+id
     });
   }
-  function searchArticles(articleObj){
+
+  function advancedSearchArticles(articleObj){
     return $http({
-      method: 'POST',
+        method: 'POST',
+        headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+        data: articleObj,
+        url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/articles/advance-search'
+    });
+  }
+
+  function searchArticles(page, keyword){
+    return $http({
+      method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      data: articleObj,
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/articles/search'
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/articles/search?page='+page+'&q='+keyword
     });
   }
 
@@ -71,6 +84,32 @@ function authorsProjectsService($http) {
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
       url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/collaborators/'+articleId
+    });
+  }
+
+  function getAuthorCollaborators(authorId){
+    return $http({
+      method: 'GET',
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/allCollaborators/'+authorId
+    });
+    
+  }
+
+  function getMessages(toUser){
+    return $http({
+      method: 'GET',
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/chats/get/'+toUser
+    });
+  }
+
+  function sendMessages(messageObj){
+    return $http({
+      method: 'POST',
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      data: messageObj,
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/chats/send'
     });
   }
 }

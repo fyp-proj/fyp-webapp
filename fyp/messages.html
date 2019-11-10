@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="App">
 <head>
 	<meta charset="UTF-8">
 	<title>WorkWise Html Template</title>
@@ -20,7 +20,7 @@
 </head>
 
 
-<body>
+<body ng-controller="authorsArticlesController as ctrl">
 
 	<div class="wrapper">
 
@@ -66,8 +66,7 @@
 									Profiles
 								</a>
 								<ul>
-									<li><a href="user-profile.html" title="">User Profile</a></li>
-									<li><a href="my-profile-feed.html" title="">my-profile-feed</a></li>
+									<li><a href="user-profile.html?userId={{ctrl.accountUserId}}" title="">User Profile</a></li>
 								</ul>
 							</li>
 							<li>
@@ -77,52 +76,12 @@
 								</a>
 							</li>
 							<li>
-								<a href="#" title="" class="not-box-openm">
-									<span><img src="images/icon6.png" alt=""></span>
-									Messages
-								</a>
-								<div class="notification-box msg" id="message">
-									<div class="nt-title">
-										<h4>Setting</h4>
-										<a href="#" title="">Clear all</a>
-									</div>
-									<div class="nott-list">
-										<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img1.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a> </h3>
-							  					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img2.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a></h3>
-							  					<p>Lorem ipsum dolor sit amet.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img3.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="messages.html" title="">Jassica William</a></h3>
-							  					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempo incididunt ut labore et dolore magna aliqua.</p>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="view-all-nots">
-						  					<a href="messages.html" title="">View All Messsages</a>
-						  				</div>
-									</div><!--nott-list end-->
-								</div><!--notification-box end-->
-							</li>
+								<li>
+				              <a href="messages.html" title="">
+				                <span><img src="images/icon6.png" alt=""></span>
+				                Messages
+				              </a>
+				            </li>
 							<li>
 								<a href="#" title="" class="not-box-open">
 									<span><img src="images/icon7.png" alt=""></span>
@@ -184,7 +143,7 @@
 					<div class="user-account">
 						<div class="user-info">
 							<img src="images/resources/user.png" alt="">
-							<a href="#" title="">John</a>
+							<a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
@@ -223,7 +182,7 @@
 								<li><a href="#" title="">Faqs</a></li>
 								<li><a href="#" title="">Terms & Conditions</a></li>
 							</ul>
-							<h3 class="tc"><a href="sign-in.html" title="">Logout</a></h3>
+							<h3 class="tc"><a ng-click="ctrl.logout()" title="">Logout</a></h3>
 						</div><!--user-account-settingss end-->
 					</div>
 				</div><!--header-data end-->
@@ -239,12 +198,52 @@
 						<div class="col-lg-4 col-md-12 no-pdd">
 							<div class="msgs-list">
 								<div class="msg-title">
+									<h3>Message to:</h3>
+									<div class="search-bar" style="width:250px !important">
+								      <form>
+								        <input type="text" ng-keyup="ctrl.searchAuthors()" ng-model="ctrl.search" name="search" placeholder="Search...">
+								        <button ng-click="ctrl.searchAuthors()" type="submit"><i class="la la-search"></i></button>
+								      </form>
+    								</div><!--search-bar end-->
+								</div><!--msg-title end-->
+								<div class="messages-list">
+									<ul>
+										<li ng-if="ctrl.search" class="active" ng-repeat="profile in ctrl.allAuthors.data">
+											<div class="usr-msg-details" ng-click="ctrl.messageTo = profile.firstName+' '+profile.lastName; ctrl.toUser=profile.id;ctrl.getMessages(profile.id)">
+												<div class="usr-ms-img">
+													<img src="images/resources/m-img1.png" alt="">
+													<span class="msg-status"></span>
+												</div>
+												<div class="usr-mg-info">
+													<h3  ng-if="profile.firstName!='empty'" ng-bind="profile.firstName"></h3>
+												</div><!--usr-mg-info end-->
+											</div><!--usr-msg-details end-->
+										</li>
+										<!-- <li ng-if="!ctrl.search" class="active" ng-repeat="profile in ctrl.messagedUsers">
+											<div class="usr-msg-details" ng-click="ctrl.messageTo = profile.userName; ctrl.toUser=profile.toUser;ctrl.getMessages(profile.toUser);">
+												<div class="usr-ms-img">
+													<img src="images/resources/m-img1.png" alt="">
+													<span class="msg-status"></span>
+												</div>
+												<div class="usr-mg-info">
+													<h3  ng-if="profile.userName!='empty'" ng-bind="profile.userName"></h3>
+													<p ng-bind="profile.lastMessage"></p>
+												</div>
+											</div>
+										</li> -->
+									</ul>
+								</div><!--messages-list end-->
+							</div><!--msgs-list end-->
+						</div>
+						<!-- <div class="col-lg-3 col-md-12 no-pdd">
+							<div class="msgs-list">
+								<div class="msg-title">
 									<h3>Messages</h3>
 									<ul>
 										<li><a href="#" title=""><i class="fa fa-cog"></i></a></li>
 										<li><a href="#" title=""><i class="fa fa-ellipsis-v"></i></a></li>
 									</ul>
-								</div><!--msg-title end-->
+								</div>
 								<div class="messages-list">
 									<ul>
 										<li class="active">
@@ -256,118 +255,30 @@
 												<div class="usr-mg-info">
 													<h3>John Doe</h3>
 													<p>Lorem ipsum dolor <img src="images/smley.png" alt=""></p>
-												</div><!--usr-mg-info end-->
+												</div>
 												<span class="posted_time">1:55 PM</span>
 												<span class="msg-notifc">1</span>
-											</div><!--usr-msg-details end-->
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="images/resources/m-img2.png" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>David Vane</h3>
-													<p>Vestibulum ac diam..</p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-											</div><!--usr-msg-details end-->
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="images/resources/m-img3.png" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Nancy Dilan</h3>
-													<p>Quam vehicula.</p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-											</div><!--usr-msg-details end-->
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="images/resources/m-img4.png" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>Norman Kenney</h3>
-													<p>Nulla quis lorem ut..</p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-											</div><!--usr-msg-details end-->
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="images/resources/m-img5.png" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>James Dilan</h3>
-													<p>Vivamus magna just..</p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-											</div><!--usr-msg-details end-->
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="images/resources/m-img6.png" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Mike Dorn</h3>
-													<p>Praesent sapien massa.</p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-											</div><!--usr-msg-details end-->
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="images/resources/m-img7.png" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>Patrick Morison</h3>
-													<p>Convallis a pellente...</p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-											</div><!--usr-msg-details end-->
+											</div>
 										</li>
 									</ul>
-								</div><!--messages-list end-->
-							</div><!--msgs-list end-->
-						</div>
+								</div>
+							</div>
+						</div> -->
 						<div class="col-lg-8 col-md-12 pd-right-none pd-left-none">
-							<div class="main-conversation-box">
+							<div class="main-conversation-box" style="width: 80%;">
 								<div class="message-bar-head">
 									<div class="usr-msg-details">
 										<div class="usr-ms-img">
 											<img src="images/resources/m-img1.png" alt="">
 										</div>
 										<div class="usr-mg-info">
-											<h3>John Doe</h3>
-											<p>Online</p>
+											<h3 ng-bind="ctrl.messageTo"></h3>
 										</div><!--usr-mg-info end-->
 									</div>
 									<a href="#" title=""><i class="fa fa-ellipsis-v"></i></a>
 								</div><!--message-bar-head end-->
 								<div class="messages-line">
-									<div class="main-message-box">
-										<div class="messg-usr-img">
-											<img src="images/resources/m-img1.png" alt="">
-										</div><!--messg-usr-img end-->
-										<div class="message-dt">
-											<div class="message-inner-dt img-bx">
-												<img src="images/resources/mt-img1.png" alt="">
-												<img src="images/resources/mt-img2.png" alt="">
-												<img src="images/resources/mt-img3.png" alt="">
-											</div><!--message-inner-dt end-->
-											<span>Sat, Aug 23, 1:08 PM</span>
-										</div><!--message-dt end-->
-									</div><!--main-message-box end-->
-									<div class="main-message-box ta-right">
+									<div class="main-message-box ta-right" style="visibility:hidden">
 										<div class="message-dt">
 											<div class="message-inner-dt">
 												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada. Vivamus suscipit tortor eget felis porttitor.</p>
@@ -378,73 +289,52 @@
 											<img src="images/resources/m-img2.png" alt="">
 										</div><!--messg-usr-img end-->
 									</div><!--main-message-box end-->
-									<div class="main-message-box st3">
-										<div class="message-dt st3">
-											<div class="message-inner-dt">
-												<p>Cras ultricies ligula.<img src="images/smley.png" alt=""></p>
-											</div><!--message-inner-dt end-->
-											<span>5 minutes ago</span>
-										</div><!--message-dt end-->
-										<div class="messg-usr-img">
-											<img src="images/resources/m-img1.png" alt="">
-										</div><!--messg-usr-img end-->
-									</div><!--main-message-box end-->
-									<div class="main-message-box ta-right">
-										<div class="message-dt">
-											<div class="message-inner-dt">
-												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada. Vivamus suscipit tortor eget felis porttitor.</p>
-											</div><!--message-inner-dt end-->
-											<span>Sat, Aug 23, 1:08 PM</span>
-										</div><!--message-dt end-->
-										<div class="messg-usr-img">
-											<img src="images/resources/m-img2.png" alt="">
-										</div><!--messg-usr-img end-->
-									</div><!--main-message-box end-->
-									<div class="main-message-box st3">
-										<div class="message-dt st3">
-											<div class="message-inner-dt">
-												<p>Lorem ipsum dolor sit amet</p>
-											</div><!--message-inner-dt end-->
-											<span>2 minutes ago</span>
-										</div><!--message-dt end-->
-										<div class="messg-usr-img">
-											<img src="images/resources/m-img1.png" alt="">
-										</div><!--messg-usr-img end-->
-									</div><!--main-message-box end-->
-									<div class="main-message-box ta-right">
-										<div class="message-dt">
-											<div class="message-inner-dt">
-												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada. Vivamus suscipit tortor eget felis porttitor.</p>
-											</div><!--message-inner-dt end-->
-											<span>Sat, Aug 23, 1:08 PM</span>
-										</div><!--message-dt end-->
-										<div class="messg-usr-img">
-											<img src="images/resources/m-img2.png" alt="">
-										</div><!--messg-usr-img end-->
-									</div><!--main-message-box end-->
-									<div class="main-message-box st3">
+									<div ng-repeat=" message in ctrl.messagesArray">
+										<div ng-if="message.toUser != ctrl.toUser" class="main-message-box st3">
+											<div class="message-dt st3">
+												<div class="message-inner-dt">
+													<p ng-bind="message.message"></p>
+												</div><!--message-inner-dt end-->
+												<span ng-bind="message.data_sent"></span>
+											</div><!--message-dt end-->
+											<div class="messg-usr-img">
+												<img src="images/resources/m-img1.png" alt="">
+											</div><!--messg-usr-img end-->
+										</div><!--main-message-box end-->
+										<div ng-if="message.toUser == ctrl.toUser" class="main-message-box ta-right">
+											<div class="message-dt" style="float:none">
+												<div class="message-inner-dt">
+													<p ng-bind="message.message"></p>
+												</div><!--message-inner-dt end-->
+												<span ng-bind="message.data_sent"></span>
+											</div><!--message-dt end-->
+											<div class="messg-usr-img">
+												<img src="images/resources/m-img2.png" alt="">
+											</div><!--messg-usr-img end-->
+										</div><!--main-message-box end-->
+									</div>
+									<!-- <div class="main-message-box st3">
 										<div class="message-dt st3">
 											<div class="message-inner-dt">
 												<p>....</p>
-											</div><!--message-inner-dt end-->
+											</div>
 											<span>Typing...</span>
-										</div><!--message-dt end-->
+										</div>
 										<div class="messg-usr-img">
 											<img src="images/resources/m-img1.png" alt="">
-										</div><!--messg-usr-img end-->
-									</div><!--main-message-box end-->
-								</div><!--messages-line end-->
-								<div class="message-send-area">
+										</div>
+									</div> -->
+								</div>
 									<form>
 										<div class="mf-field">
-											<input type="text" name="message" placeholder="Type a message here">
-											<button type="submit">Send</button>
+											<input type="text" ng-disabled="!ctrl.toUser" ng-model="ctrl.message" name="message" placeholder="Type a message here">
+											<button type="submit" ng-disabled="!ctrl.toUser" ng-click="ctrl.sendMessages();ctrl.message='';">Send</button>
 										</div>
-										<ul>
+										<!-- <ul>
 											<li><a href="#" title=""><i class="fa fa-smile-o"></i></a></li>
 											<li><a href="#" title=""><i class="fa fa-camera"></i></a></li>
 											<li><a href="#" title=""><i class="fa fa-paperclip"></i></a></li>
-										</ul>
+										</ul> -->
 									</form>
 								</div><!--message-send-area end-->
 							</div><!--main-conversation-box end-->
@@ -480,6 +370,9 @@
 
 
 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="./node_modules/angular/angular.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/popper.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -487,6 +380,12 @@
 <script type="text/javascript" src="lib/slick/slick.min.js"></script>
 <script type="text/javascript" src="js/scrollbar.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
-
+<script type="text/javascript" src="js/controllers/user.controller.js"></script>
+<script type="text/javascript" src="js/controllers/home.controller.js"></script>
+<script type="text/javascript" src="js/controllers/authors-articles.controller.js"></script>
+<script type="text/javascript" src="js/controllers/authors.controller.js"></script>
+<script type="text/javascript" src="js/services/user.service.js"></script>
+<script type="text/javascript" src="js/services/home.service.js"></script>
+<script type="text/javascript" src="js/services/authors-projects.service.js"></script>
 </body>
 </html>

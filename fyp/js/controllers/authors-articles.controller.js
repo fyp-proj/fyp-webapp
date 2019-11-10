@@ -1,18 +1,8 @@
-angular.module('main').controller('authorsArticlesController',authorsArticlesController).directive("myCoolDirective", function() {
-    return {
-        restrict: "A",
-        link: function(scope, elem, attrs) {
-            $(elem).click(function() {
-                var target = $(elem).next(".panel-collapse");
-                target.hasClass("collapse") ? target.collapse("show") : target.collapse("hide");
-            });
-        }
-    }
-});;
+angular.module('main').controller('authorsArticlesController',authorsArticlesController);
 
-authorsArticlesController.$inject = ['$http', '$window', 'authorsProjectsService', '$location'];
+authorsArticlesController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'userService'];
 
-function authorsArticlesController($http, $window, authorsProjectsService, $location){
+function authorsArticlesController($http, $window, authorsProjectsService, $location, userService){
 
   var vm = this;
 
@@ -33,20 +23,40 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   vm.emailSubject = '';
   vm.emailMessage = '';
   vm.recipientId = null;
+  vm.messagedUsers = [];
+  vm.messagesArray = [];
 
   vm.getAllAuthors = getAllAuthors;
   vm.getAllArticles = getAllArticles;
   vm.searchArticles = searchArticles;
+  vm.advancedSearchArticles = advancedSearchArticles;
   vm.searchAuthors = searchAuthors;
   vm.pageChanged = pageChanged;
   vm.sendEmail = sendEmail;
-  vm.openRdata = openRdata;
+  // vm.openRdata = openRdata;
   vm.openGoogleScholar = openGoogleScholar;
   vm.showCollaborators = showCollaborators;
+  vm.getMessages = getMessages;
+  vm.sendMessages = sendMessages;
+  vm.logout = logout;
 
   function initPage(){
     vm.getAllAuthors();
     vm.getAllArticles();
+    setTimeout(function(){
+      for(var i=0; i<vm.allAuthors.data.length; i++){
+        var mail = document.getElementById("test"+i);
+        mail.classList.add('post-jb');
+        mail.addEventListener("click", function() {
+          $(".post-popup.job_post").addClass("active");
+          $(".wrapper").addClass("overlay");
+        }, false)}
+      }
+    ,1500);
+    vm.accountUserId = localStorage.getItem("userId");
+    authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
+        vm.userProfile = resp.data.data;
+    });
   }
 
   function getAllAuthors (){
@@ -68,8 +78,16 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
 
   function searchArticles(){
     vm.loadArticles = true;
+    authorsProjectsService.searchArticles(vm.currentPage, vm.keyword).then(function(resp){
+      vm.allArticles = resp.data;
+      vm.loadArticles = false;
+    });
+  }
+
+  function advancedSearchArticles(){
+    vm.loadArticles = true;
     var articleObj = {title: vm.title, keywords:vm.keywords, fromDate:vm.fromDate, toDate:vm.toDate};
-    authorsProjectsService.searchArticles(articleObj).then(function(resp){
+    authorsProjectsService.advancedSearchArticles(articleObj).then(function(resp){
       vm.allArticles = resp.data;
       vm.loadArticles = false;
     });
@@ -117,14 +135,15 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   function sendEmail(){
     vm.emailObj = {subject: vm.emailSubject, message: vm.emailMessage};
     authorsProjectsService.sendEmail(vm.recipientId, vm.emailObj).then(function(resp){
-
+      alert("Your mail is sent successfuly!");
+      $window.location.href = "/profiles.html";
     });
   }
-  function openRdata(BrName){
-      self.location = "http://www.re3data.org/search?query="+BrName;
-  }
+  // function openRdata(BrName){
+  //     self.location = "http://www.re3data.org/search?query="+BrName;
+  // }
   function openGoogleScholar(articleName){
-      self.location = "https://www.scholar.google.com/scholar?q="+articleName;
+      self.location = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q="+articleName;
   }
 
   function showCollaborators(articleId){
@@ -132,6 +151,34 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
       vm.collaborators = resp.data;
     });
   }
+
+  function getMessages(toUser){
+    authorsProjectsService.getMessages(toUser).then(function(resp){
+      vm.messagesArray = resp.data.data;
+    });
+  }
+
+  function sendMessages(){
+    var messageObj = {toUser: vm.toUser, message:vm.message, status:1, type:"String"};
+    vm.messagedUsers.push({userId:vm.toUser, userName:'first and last name', lastMessage:'lastMessage'});
+    authorsProjectsService.sendMessages(messageObj).then(function(resp){
+      vm.messagesArray.push({toUser: vm.toUser, message: resp.data.comment.message, data_sent: resp.data.comment.created_at});
+    });
+  }
+
+  function logout(){
+     var key = localStorage.getItem("apiToken");
+     userService.logOut(key).then(function(resp){
+       if(resp.data.status == 'success'){
+         localStorage.removeItem("apiToken");
+         alert(resp.data.message);
+         $window.location.href= "/sign-in.html";
+       }
+       else{
+         alert(resp.data.message);
+       }
+     });
+   }
 
   initPage();
 }
