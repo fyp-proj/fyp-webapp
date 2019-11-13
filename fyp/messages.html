@@ -209,7 +209,7 @@
 								<div class="messages-list">
 									<ul>
 										<li ng-if="ctrl.search" class="active" ng-repeat="profile in ctrl.allAuthors.data">
-											<div class="usr-msg-details" ng-click="ctrl.messageTo = profile.firstName+' '+profile.lastName; ctrl.toUser=profile.id;ctrl.getMessages(profile.id)">
+											<div class="usr-msg-details" ng-click="ctrl.messageTo = profile.firstName+' '+profile.lastName; ctrl.toUser=profile.id;ctrl.getMessages(profile)">
 												<div class="usr-ms-img">
 													<img src="images/resources/m-img1.png" alt="">
 													<span class="msg-status"></span>
@@ -219,18 +219,20 @@
 												</div><!--usr-mg-info end-->
 											</div><!--usr-msg-details end-->
 										</li>
-										<!-- <li ng-if="!ctrl.search" class="active" ng-repeat="profile in ctrl.messagedUsers">
-											<div class="usr-msg-details" ng-click="ctrl.messageTo = profile.userName; ctrl.toUser=profile.toUser;ctrl.getMessages(profile.toUser);">
+										<li ng-if="!ctrl.search" class="active" ng-repeat="profile in ctrl.messagedUsers">
+											<div class="usr-msg-details" ng-click="ctrl.accountUserId==profile.fromuser ? ctrl.messageTo = profile.to_user_first_name : ctrl.messageTo = profile.from_user_first_name;
+											ctrl.accountUserId==profile.fromuser ? ctrl.toUser=profile.touser : ctrl.toUser = profile.fromuser;ctrl.getMessages(profile, true);">
 												<div class="usr-ms-img">
 													<img src="images/resources/m-img1.png" alt="">
 													<span class="msg-status"></span>
 												</div>
 												<div class="usr-mg-info">
-													<h3  ng-if="profile.userName!='empty'" ng-bind="profile.userName"></h3>
-													<p ng-bind="profile.lastMessage"></p>
+													<h3 ng-if="ctrl.accountUserId==profile.fromuser" ng-bind="profile.to_user_first_name+ ' '+to_user_last_name"></h3>
+													<h3 ng-if="ctrl.accountUserId==profile.touser" ng-bind="profile.from_user_first_name+ ' '+profile.from_user_last_name"></h3>
+													<p ng-bind="profile.message"></p>
 												</div>
 											</div>
-										</li> -->
+										</li>
 									</ul>
 								</div><!--messages-list end-->
 							</div><!--msgs-list end-->
@@ -387,5 +389,20 @@
 <script type="text/javascript" src="js/services/user.service.js"></script>
 <script type="text/javascript" src="js/services/home.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+<script>
+  var config = {
+      apiKey:'AIzaSyBP7BIlP-otdjgsjvaBhppqlh7b3dDBFWw',
+      authDomain: 'fyp-reserve.firebaseapp.com',
+      databaseURL: 'https://fyp-reserve.firebaseio.com/',
+      storageBucket:'fyp-reserve.appspot.com',
+      messagingSenderId:'219910147426'
+  };
+  firebase.initializeApp(config);
+</script>
+<!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+
 </body>
 </html>

@@ -28,6 +28,21 @@ angular.module("main").controller("mainController",mainController );
 
    vm.key = localStorage.getItem("apiToken");
 
+   function firebaseDataService() {
+     var root = firebase.database().ref();
+     var service = {
+         root: root,
+         requests: root.child('requests')
+     };
+     return service;
+   }
+   function getRequestsByUser(uid) {
+    if (!requests) {
+        requests = $firebaseArray(firebaseDataService.requests.child(uid).child('userRequests'));
+    }
+    return requests;
+   }
+
    function onLoadFunction (){
      gapi.client.setApiKey('AIzaSyC7_U_Ugdo37Iibke1NjzdFSomANF2PeVk');
      gapi.client.load('plus', 'v1', function (){})

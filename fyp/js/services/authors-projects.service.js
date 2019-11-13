@@ -17,6 +17,7 @@ function authorsProjectsService($http) {
   service.getAuthorCollaborators = getAuthorCollaborators;
   service.getMessages = getMessages;
   service.sendMessages = sendMessages;
+  service.getChats = getChats;
 
 
 
@@ -100,7 +101,15 @@ function authorsProjectsService($http) {
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/chats/get/'+toUser
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/chats/get/messages/'+toUser
+    });
+  }
+
+  function getChats(){
+    return $http({
+      method: 'GET',
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/chats/get/chats'
     });
   }
 
