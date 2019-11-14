@@ -671,6 +671,7 @@ nav > ul > li > a:hover {
 }
 .tc {
 	text-align: center;
+	cursor: pointer;
 }
 .tc a {
 	color: #000;

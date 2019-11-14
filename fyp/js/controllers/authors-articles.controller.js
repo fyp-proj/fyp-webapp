@@ -101,6 +101,16 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
       vm.allAuthors = resp.data;
       vm.loadAuthors = false;
     });
+    setTimeout(function(){
+      for(var i=0; i<vm.allAuthors.data.length; i++){
+        var mail = document.getElementById("test"+i);
+        mail.classList.add('post-jb');
+        mail.addEventListener("click", function() {
+          $(".post-popup.job_post").addClass("active");
+          $(".wrapper").addClass("overlay");
+        }, false)}
+      }
+    ,1500);
   }
 
   function pageChanged (prev, page, type){
@@ -161,11 +171,19 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     }
     else user = toUser.id;
 
+    var database = firebase.database();
+    var starCountRef = database.ref('chat'+vm.accountUserId);
+    starCountRef.on('value', function(snapshot) {
+        vm.array = snapshot.val();
+      console.log(snapshot.val());
+    });
     authorsProjectsService.getMessages(user).then(function(resp){
       vm.messagesArray = resp.data.data;
-      // for(var key in vm.array){
-      //   vm.messagesArray.push(vm.array[key]);
-      // }
+      for(var key in vm.array){
+        if((vm.array[key].fromuser == vm.messagesArray[0].fromuser && vm.array[key].touser == vm.messagesArray[0].touser) || (vm.array[key].fromuser == vm.messagesArray[0].touser && vm.array[key].touser == vm.messagesArray[0].fromuser)){
+        vm.messagesArray.push(vm.array[key]);
+        }
+      }
     });
   }
 
@@ -173,15 +191,15 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     var messageObj = {toUser: vm.toUser, message:vm.message, status:1, type:"String"};
 
     authorsProjectsService.sendMessages(messageObj).then(function(resp){
-      vm.messagesArray.push({data_sent: resp.data.comment.created_at, message: resp.data.comment.message, toUser: vm.accountUserId});
+      vm.messagesArray.push({data_sent: resp.data.comment.created_at, message: resp.data.comment.message, toUser: vm.toUser});
     });
   }
 
   function getChats(){
+    console.log(vm.accountUserId);
     var database = firebase.database();
     var starCountRef = database.ref('chat'+vm.accountUserId);
     starCountRef.on('value', function(snapshot) {
-        vm.array = snapshot.val();
       console.log(snapshot.val());
     });
     authorsProjectsService.getChats().then(function(resp){
