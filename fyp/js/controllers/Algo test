@@ -1,0 +1,29 @@
+<!DOCTYPE html> 
+<html> 
+  
+<head> 
+    <title> 
+        How to pretty print JSON 
+        string in JavaScript ? 
+    </title> 
+</head> 
+  
+<body> 
+    <h1 style="color:green;">  
+        GeeksforGeeks  
+    </h1> 
+      
+    <p id="GFG_UP" style= 
+        "font-size: 15px; font-weight: bold;"> 
+    </p> 
+      
+    <button onclick="gfg_Run();"> 
+        click here 
+    </button> 
+      
+    <pre id="GFG_DOWN" style= 
+        "color:green; font-size: 20px; font-weight: bold;"> 
+    </pre> 
+</body> 
+  
+</html>            

@@ -42,7 +42,7 @@
 									Home
 								</a>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="companies.html" title="">
 									<span><img src="images/icon2.png" alt=""></span>
 									Companies
@@ -51,7 +51,7 @@
 									<li><a href="companies.html" title="">Companies</a></li>
 									<li><a href="company-profile.html" title="">Company Profile</a></li>
 								</ul>
-							</li>
+							</li> -->
 							<li>
 								<a href="projects.html" title="">
 									<span><img src="images/icon3.png" alt=""></span>
@@ -68,12 +68,12 @@
 									<!-- <li><a href="my-profile-feed.html" title="">my-profile-feed</a></li> -->
 								</ul>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="jobs.html" title="">
 									<span><img src="images/icon5.png" alt=""></span>
 									Jobs
 								</a>
-							</li>
+							</li> -->
 							<li>
 				              <a href="messages.html" title="">
 				                <span><img src="images/icon6.png" alt=""></span>
@@ -232,11 +232,11 @@
 												<div class="usy-dt">
 													<img src="images/resources/us-pic.png" alt="">
 													<div class="usy-name">
-														<h3>John Doe</h3>
+														<a>Article Name: <p class="zoom" ng-click="ctrl.openGoogleScholar(article.title)" ng-bind="article.title"></p></a>
 													</div>
-													<div style="clear:both;padding-top: 10px;" ng-init="ctrl.showColl = false;"><a style="padding: 5px;display: flex;width: 100px;" ng-click="ctrl.showCollaborators(article.id);ctrl.showColl = true;" class="follow">Show Collaborators</a></div>
+													<div style="clear:both;padding-top: 10px;" ng-init="ctrl.showColl = false;"><a style="padding: 5px;display: flex;width: 110px; cursor:pointer;" ng-click="ctrl.showCollaborators(article.id);ctrl.showColl = true; id = article.id" class="follow">Show Collaborators</a></div>
 													<span ng-if="ctrl.showColl" style="font-weight:bold;"> Collaborators: </span>
-													<span ng-if="ctrl.showColl" ng-repeat="col in ctrl.collaborators.data">
+													<span ng-if="ctrl.showColl && ctrl.collaborators.id == article.id" ng-repeat="col in ctrl.collaborators.data">
 														<span ng-bind="col.firstName + ' ' + col.lastName"></span>,&nbsp
 													</span>
 												</div>
@@ -255,7 +255,6 @@
                         <span ng-bind="article.date" ng-if="article.date != 'ND'"></span>
                       </div>
 											<div class="job_descp" style="margin-top: 10px;">
-												<a>Article Name: <p ng-click="ctrl.openGoogleScholar(article.title)" ng-bind="article.title"></p></a>
                         <a>BR Country: <p ng-bind="article.br.country"></p></a>
                         <a>BR Name: <p ng-bind="article.br.name"></p></a>
                     </div>

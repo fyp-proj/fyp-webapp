@@ -392,7 +392,7 @@ header {
 
 nav {
 	float: left;
-	width: 60%;
+	width: 55%;
 	text-align: right;
 	padding-right: 13px;
 }
@@ -536,7 +536,7 @@ nav > ul > li > a:hover {
 
 .user-account {
 	float: right;
-	width: 110px;
+	width: 150px;
 	border-left: 1px solid #dd3e2b;
 	border-right: 1px solid #dd3e2b;
 	box-sizing: border-box;
@@ -6839,4 +6839,52 @@ ul#myTab {
     line-height: 24px;
     font-size: 14px;
     color: #666666;
+}
+.zoom {
+  transition: transform .2s;
+  cursor:pointer;
+}
+
+.zoom:hover {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Safari 3-8 */
+  transform: scale(1.2); 
+}
+
+.notification {
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+.badge1 {
+  position: absolute;
+  top: 15px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  color: white;
+}
+
+.loader {
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #3498db;
+  width: 20px;
+  height: 20px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -43,19 +43,17 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
 
   function initPage(){
     vm.accountUserId = localStorage.getItem("userId");
-    vm.getAllAuthors();
-    vm.getAllArticles();
-    vm.getChats();
-    setTimeout(function(){
-      for(var i=0; i<vm.allAuthors.data.length; i++){
-        var mail = document.getElementById("test"+i);
-        mail.classList.add('post-jb');
-        mail.addEventListener("click", function() {
-          $(".post-popup.job_post").addClass("active");
-          $(".wrapper").addClass("overlay");
-        }, false)}
-      }
-    ,1500);
+    var url = window.location.href;
+    var param = url.substring(22);
+    if(param == "profiles.html"){
+      vm.getAllAuthors();
+    }
+    if(param == "projects.html"){
+      vm.getAllArticles();
+    }
+    if(param == "messages.html"){
+      vm.getChats();
+    }
     authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
         vm.userProfile = resp.data.data;
     });
@@ -66,6 +64,16 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     authorsProjectsService.getAllAuthors(vm.currentPage).then(function(resp){
       vm.allAuthors = resp.data;
       vm.loadAuthors = false;
+      setTimeout(function(){
+      for(var i=0; i<vm.allAuthors.data.length; i++){
+        var mail = document.getElementById("test"+i);
+        mail.classList.add('post-jb');
+        mail.addEventListener("click", function() {
+          $(".post-popup.job_post").addClass("active");
+          $(".wrapper").addClass("overlay");
+        }, false)}
+      }
+    ,1000);
     });
 
   }
@@ -125,25 +133,6 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
       vm.getAllAuthors();
   }
 
-
-  function openEmailModal(){
-    var modalInstance = $uibModal.open({
-      templateUrl: '/kois/admin/prescription-templates/prescription-template.html',
-      controller: 'prescriptionTemplateController',
-      backdrop: 'static',
-      size: 'lg',
-      controllerAs: 'ctrl',
-      resolve: {
-
-      }
-    });
-
-    modalInstance.result.then( function ( new_template ) {
-
-    });
-
-
-  }
   function sendEmail(){
     vm.emailObj = {subject: vm.emailSubject, message: vm.emailMessage};
     authorsProjectsService.sendEmail(vm.recipientId, vm.emailObj).then(function(resp){
@@ -151,9 +140,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
       $window.location.href = "/profiles.html";
     });
   }
-  // function openRdata(BrName){
-  //     self.location = "http://www.re3data.org/search?query="+BrName;
-  // }
+
   function openGoogleScholar(articleName){
       self.location = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q="+articleName;
   }
@@ -161,6 +148,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   function showCollaborators(articleId){
     authorsProjectsService.showCollaborators(articleId).then(function(resp){
       vm.collaborators = resp.data;
+      vm.collaborators.id=articleId;
     });
   }
 
@@ -188,7 +176,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   }
 
   function sendMessages(){
-    var messageObj = {toUser: vm.toUser, message:vm.message, status:1, type:"String"};
+    var messageObj = {toUser: vm.toUser, message:vm.message, status:1, type:"message"};
 
     authorsProjectsService.sendMessages(messageObj).then(function(resp){
       vm.messagesArray.push({data_sent: resp.data.comment.created_at, message: resp.data.comment.message, toUser: vm.toUser});
@@ -196,7 +184,6 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   }
 
   function getChats(){
-    console.log(vm.accountUserId);
     var database = firebase.database();
     var starCountRef = database.ref('chat'+vm.accountUserId);
     starCountRef.on('value', function(snapshot) {

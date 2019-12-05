@@ -7,15 +7,16 @@ function authorController($http, $window, authorsProjectsService, $location, use
   var vm = this;
   vm.userProfile = null;
   vm.authorCollaborators = [];
+  vm.loadAuthors = false;
 
   vm.logout = logout;
+  vm.sendEmail = sendEmail;
+  vm.sendMessage = sendMessage;
+  vm.searchAuthors = searchAuthors;
 
   function initPage(){
-    getAuthorDetails();
     vm.accountUserId = localStorage.getItem("userId");
-    authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
-        vm.userProfile = resp.data.data;
-    });
+    getAuthorDetails();  
   }
 
   function getAuthorDetails() {
@@ -45,5 +46,29 @@ function authorController($http, $window, authorsProjectsService, $location, use
      });
    }
 
+  function sendEmail(){
+   vm.recipientId = url.searchParams.get("userId");
+   vm.emailObj = {subject: vm.emailSubject, message: vm.emailMessage};
+   authorsProjectsService.sendEmail(vm.recipientId, vm.emailObj).then(function(resp){
+    alert("Your mail is sent successfuly!");
+    $window.location.href = "/my-profile-feed.html";
+   });
+  }
+
+  function sendMessage(articleName){
+   var messageObj = {toUser: vm.toUser, message:'review request for article ' + articleName, status:3, type:"notification"};
+   authorsProjectsService.sendMessages(messageObj).then(function(resp){
+     if(resp.data.status=='success')
+       alert("Your request is sent successfuly!");
+   });
+  }
+
+  function searchAuthors(){
+    vm.loadAuthors = true;
+    authorsProjectsService.searchAuthors(vm.search, 1).then(function(resp){
+      vm.allAuthors = resp.data;
+      vm.loadAuthors = false;
+    });
+  }
   initPage();
 }

@@ -46,7 +46,7 @@
                 Home
               </a>
             </li>
-            <li>
+           <!--  <li>
               <a href="companies.html" title="">
                 <span><img src="images/icon2.png" alt=""></span>
                 Companies
@@ -55,7 +55,7 @@
                 <li><a href="companies.html" title="">Companies</a></li>
                 <li><a href="company-profile.html" title="">Company Profile</a></li>
               </ul>
-            </li>
+            </li> -->
             <li>
               <a href="projects.html" title="">
                 <span><img src="images/icon3.png" alt=""></span>
@@ -72,71 +72,41 @@
                 <!-- <li><a href="my-profile-feed.html" title="">my-profile-feed</a></li> -->
               </ul>
             </li>
-            <li>
+            <!-- <li>
               <a href="jobs.html" title="">
                 <span><img src="images/icon5.png" alt=""></span>
                 Jobs
               </a>
-            </li>
+            </li> -->
             <li>
               <a href="messages.html" title="">
                 <span><img src="images/icon6.png" alt=""></span>
                 Messages
               </a>
             </li>
-            <li>
-              <a href="#" title="" class="not-box-open">
+            <li style="height:0px !important">
+              <a href="#" title="" class="not-box-open" >
                 <span><img src="images/icon7.png" alt=""></span>
                 Notification
+                  <span class="badge1" ng-bind="ctrl.reviewRequests.length"></span>
               </a>
               <div class="notification-box noti" id="notification">
-                <div class="nt-title">
-                  <h4>Setting</h4>
-                  <a href="#" title="">Clear all</a>
-                </div>
                 <div class="nott-list">
                   <div class="notfication-details">
-                    <div class="noty-user-img">
-                      <img src="images/resources/ny-img1.png" alt="">
-                    </div>
-                    <div class="notification-info">
-                      <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                      <span>2 min ago</span>
-                    </div>
-                    <!--notification-info -->
-                  </div>
-                  <div class="notfication-details">
-                    <div class="noty-user-img">
-                      <img src="images/resources/ny-img2.png" alt="">
-                    </div>
-                    <div class="notification-info">
-                      <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                      <span>2 min ago</span>
-                    </div>
-                    <!--notification-info -->
-                  </div>
-                  <div class="notfication-details">
-                    <div class="noty-user-img">
-                      <img src="images/resources/ny-img3.png" alt="">
-                    </div>
-                    <div class="notification-info">
-                      <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                      <span>2 min ago</span>
-                    </div>
-                    <!--notification-info -->
-                  </div>
-                  <div class="notfication-details">
-                    <div class="noty-user-img">
-                      <img src="images/resources/ny-img2.png" alt="">
-                    </div>
-                    <div class="notification-info">
-                      <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                      <span>2 min ago</span>
+                    <div class="notification-info" ng-repeat="request in ctrl.reviewRequests">
+                      <h3><a href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> <p ng-bind="request.message"></p></h3>
+                      <div style="clear:both">
+                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id)">Accept</button>
+                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
+                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
+                      </div>
+                      <span style="display: contents;" ng-bind="request.created_at"></span>
+                      
                     </div>
                     <!--notification-info -->
                   </div>
                   <div class="view-all-nots">
-                    <a href="#" title="">View All Notification</a>
+                    <a style="padding:5px 0" title="">All Notifications</a>
                   </div>
                 </div>
                 <!--nott-list end-->
@@ -238,7 +208,7 @@
                   </div>
                   <div class="post-st">
                     <ul>
-                      <li><a class="post-jb active" ng-click="ctrl.getBrIds()" href="#" title="">Post an Article</a></li>
+                      <li><a class="post-jb active" ng-click="ctrl.getBrIds(); ctrl.getAuthors()" href="#" title="">Post an Article</a></li>
                     </ul>
                   </div>
                   <!--post-st end-->
@@ -288,6 +258,7 @@
                         </li>
                         <!-- ctrl.getComments(article.id) -->
                         <li><a href="#" ng-click="ctrl.getComments(article.id, article)">Show Comments</a></li>
+                        <li ng-if="article.ongoing"><button class="follow" ng-click="ctrl.requestOnGoingArticle(article.title)">request on going article</button></li>
                       </ul>
                     </div>
                     <div ng-if="article.comments" style="background-color:silver; margin-bottom:5px;float:left; width:100%" ng-repeat="comment in article.comments">
@@ -333,7 +304,10 @@
             </div>
             <div class="col-lg-12">
               <div class="inp-field">
-                <input ng-model="ctrl.brId" />
+                <select ng-model="ctrl.brId">
+                  <option selected="selected" ng-value="''" disabled> select an br</option>
+                  <option ng-repeat="br in ctrl.brIds.data" ng-bind="br.name" ng-value="br.id"></option>
+                </select>
               </div>
             </div>
             <!-- <div class="col-lg-6 dropdown">
@@ -349,6 +323,8 @@
               <div >
                 <input type="text" ng-model="ctrl.search" name="search" placeholder="collaborators">
               </div>
+              <input style="float: left;width: 10px !important;margin-right: 10px;margin-top: -8px;" type="checkbox" ng-model="ctrl.onGoing" checked>
+              <div>On going article</div>
             </div>
             <div class="col-lg-6">
               <div>
@@ -361,8 +337,8 @@
             </div> -->
             <div class="col-lg-12">
               <ul>
-                <li><button class="active" type="submit" ng-click="ctrl.createPost()" value="post">Post</button></li>
-                <li><a href="#" title="">Cancel</a></li>
+                <li><button href="#" class="active" type="submit" ng-click="ctrl.createPost()" value="post">Post</button></li>
+                <li><a href="#" ng-click="ctrl.cancel()" title="">Cancel</a></li>
               </ul>
             </div>
           </div>
