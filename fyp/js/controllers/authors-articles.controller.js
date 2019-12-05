@@ -41,6 +41,8 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   vm.logout = logout;
   vm.getChats = getChats;
 
+  
+
   function initPage(){
     vm.accountUserId = localStorage.getItem("userId");
     var url = window.location.href;
@@ -163,16 +165,23 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     var starCountRef = database.ref('chat'+vm.accountUserId);
     starCountRef.on('value', function(snapshot) {
         vm.array = snapshot.val();
-      console.log(snapshot.val());
+      console.log(snapshot);
     });
+
     authorsProjectsService.getMessages(user).then(function(resp){
-      vm.messagesArray = resp.data.data;
-      for(var key in vm.array){
-        if((vm.array[key].fromuser == vm.messagesArray[0].fromuser && vm.array[key].touser == vm.messagesArray[0].touser) || (vm.array[key].fromuser == vm.messagesArray[0].touser && vm.array[key].touser == vm.messagesArray[0].fromuser)){
-        vm.messagesArray.push(vm.array[key]);
-        }
-      }
+        vm.messagesArray = resp.data.data;
     });
+
+    setInterval(function(){
+      authorsProjectsService.getMessages(user).then(function(resp){
+        vm.messagesArray = resp.data.data;
+        // for(var key in vm.array){
+        //   if((vm.array[key].fromuser == vm.messagesArray[0].fromuser && vm.array[key].touser == vm.messagesArray[0].touser) || (vm.array[key].fromuser == vm.messagesArray[0].touser && vm.array[key].touser == vm.messagesArray[0].fromuser)){
+        //   vm.messagesArray.push(vm.array[key]);
+        //   }
+        // }
+      });
+    }, 4000);
   }
 
   function sendMessages(){
