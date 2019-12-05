@@ -98,7 +98,7 @@
                       <div style="clear:both">
                         <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id)">Accept</button>
                         <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
-                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
+                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
                       </div>
                       <span style="display: contents;" ng-bind="request.created_at"></span>
                       
