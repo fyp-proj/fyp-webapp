@@ -53,7 +53,7 @@ function homeService($http) {
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/notifications/get?status='+status,
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/notifications/get',
     });
   }
 

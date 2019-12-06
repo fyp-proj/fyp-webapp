@@ -20,6 +20,8 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.reviewRequests = [];
 	vm.reviewedRequests = [];
 	vm.onGoing=false;
+	vm.addCollabs = [];
+	vm.loadAuthors = false;
 
 	vm.createPost = createPost;
 	vm.getBrIds = getBrIds;
@@ -33,42 +35,34 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.cancel = cancel;
 	vm.deleteNotif = deleteNotif;
 	vm.requestOnGoingArticle = requestOnGoingArticle;
+	vm.addCollaborators = addCollaborators;
+	vm.searchAuthors = searchAuthors;
+	vm.removeCol = removeCol;
 	vm.logout = logout;
 
 	function initPage(){
 		vm.accountUserId = localStorage.getItem("userId");
 		authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
         	vm.userProfile = resp.data.data;
-        	homeService.getReviewRequest(3).then(function(resp){
-		    	if(resp.data.data.length!= 0){
-		    		for(var i =0; i<resp.data.data.length; i++){
-		    			if(resp.data.data[i].status==3)
-		    				vm.reviewRequests.push(resp.data.data[i]);
-		    		}
-		    		// vm.reviewRequests = resp.data.data;
-		    	}
-		    	homeService.getReviewRequest(2).then(function(resp){
-			    	if(resp.data.data.length !=0){
-			    		for(var i =0; i<resp.data.data.length; i++){
-			    			if(resp.data.data[i].type=='notification' && resp.data.data[i].from_user_first_name==vm.userProfile.firstName && resp.data.data[i].last_name==vm.userProfile.lastName)
-			    				vm.reviewRequests.push(resp.data.data[i]);
-		    			}
-			    		// vm.reviewRequests.concat(resp.data.data);
-			    	}
-	    		});
-	    		homeService.getReviewRequest(1).then(function(resp){
-			    	if(resp.data.data.length !=0){
-			    		for(var i =0; i<resp.data.data.length; i++){
-			    			if(resp.data.data[i].type=='notification' && resp.data.data[i].from_user_first_name==vm.userProfile.firstName && resp.data.data[i].last_name==vm.userProfile.lastName)
-			    				vm.reviewRequests.push(resp.data.data[i]);
-		    			}
-			    		// vm.reviewRequests.concat(resp.data.data);
-			    	}
-	    		});
+        	homeService.getReviewRequest().then(function(resp){
+		    	vm.reviewRequests = resp.data.data;
 	   		});
     	});
 	    vm.loadNewsFeed();
 	    // vm.getAuthors();
+  	}
+
+  	function removeCol(index){
+  		vm.addCollabs.splice(index,1);
+  	}
+  	function addCollaborators(){
+  		for (var i=0; i < vm.allAuthors.data.length; i++) {
+	        if (vm.allAuthors.data[i].id == vm.addColl) {
+	            vm.addCollabs.push({id:vm.allAuthors.data[i].id, name:vm.allAuthors.data[i].firstName+' '+vm.allAuthors.data[i].lastName});
+	            break;
+	        }
+    	}
+  		
   	}
 
   	function myFunction() {
@@ -92,13 +86,18 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		var requestObj = {chatId: chatId, message: message, status: status, type: 'notification'};
 		homeService.updateRequest(requestObj).then(function(resp){
 			// vm.reviewRequests.splice(vm.reviewRequests.indexOf(index));
+			if(resp.data.success){
+				alert('The request is '+ message + 'ed');
+				$window.location.href= "/messages.html";
+			}
 		});
 	}
 
-	function requestOnGoingArticle(articleName){
-		var requetObj = {toUser: vm.toUser, message:'request to join your ongoing article '+articleName, status:3, type:"ongoing"};
+	function requestOnGoingArticle(articleName, userId){
+		var requetObj = {toUser: userId, message:'request to join your ongoing article '+articleName, status:3, type:"ongoing"};
 		authorsProjectsService.sendMessages(requetObj).then(function(resp){
-
+			if(resp.data.status == 'success')
+				alert('Request on going article is sent');
 		});
 	}
 
@@ -119,7 +118,11 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	}
 
 	function createPost(){
-		vm.articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: [5], ongoing:vm.onGoing};
+		var collIds= [];
+		for(var i =0; i<vm.addCollabs.length; i++){
+			collIds[i]=vm.addCollabs[i].id;
+		}
+		vm.articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: collIds, ongoing:vm.onGoing};
 		homeService.createPost(vm.articleObj).then(function(resp){
 			if(resp.data.status=='success'){
 				alert(resp.data.message);
@@ -163,6 +166,14 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 			vm.newsFeed = resp.data.data;
 		});
 	}
+
+	function searchAuthors(){
+	    vm.loadAuthors = true;
+	    authorsProjectsService.searchAuthors(vm.search, 1).then(function(resp){
+	      vm.allAuthors = resp.data;
+	      vm.loadAuthors = false;
+	    });
+  	}
 
 	function logout(){
      var key = localStorage.getItem("apiToken");

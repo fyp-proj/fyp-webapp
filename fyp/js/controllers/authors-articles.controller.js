@@ -161,12 +161,12 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     }
     else user = toUser.id;
 
-    var database = firebase.database();
-    var starCountRef = database.ref('chat'+vm.accountUserId);
-    starCountRef.on('value', function(snapshot) {
-        vm.array = snapshot.val();
-      console.log(snapshot);
-    });
+    // var database = firebase.database();
+    // var starCountRef = database.ref('chat'+vm.accountUserId);
+    // starCountRef.on('value', function(snapshot) {
+    //     vm.array = snapshot.val();
+    //   console.log(snapshot);
+    // });
 
     authorsProjectsService.getMessages(user).then(function(resp){
         vm.messagesArray = resp.data.data;
@@ -193,11 +193,11 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   }
 
   function getChats(){
-    var database = firebase.database();
-    var starCountRef = database.ref('chat'+vm.accountUserId);
-    starCountRef.on('value', function(snapshot) {
-      console.log(snapshot.val());
-    });
+    // var database = firebase.database();
+    // var starCountRef = database.ref('chat'+vm.accountUserId);
+    // starCountRef.on('value', function(snapshot) {
+    //   console.log(snapshot.val());
+    // });
     authorsProjectsService.getChats().then(function(resp){
       vm.messagedUsers = resp.data.data;
     });

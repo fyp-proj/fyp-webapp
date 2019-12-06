@@ -275,7 +275,7 @@
 												</div>
 												<div class="job_descp">
 						                            <span ng-repeat="art in ctrl.userProfile.data.articles">
-						                              <div style="font-weight: bold">Article Name:</div> <span ng-bind="art.title"></span>
+						                              <div style="font-weight: bold">Article Name:</div> <li class="zoom" ng-click="ctrl.openGoogleScholar(art.title)" ng-bind="art.title"></li>
 						                              <div style="font-weight: bold">BR Name: </div>
 						                              <p ng-bind="art.br.name"></p>
 						                              <span>Country</span>

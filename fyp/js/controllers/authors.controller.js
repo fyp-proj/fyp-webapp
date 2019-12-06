@@ -13,10 +13,15 @@ function authorController($http, $window, authorsProjectsService, $location, use
   vm.sendEmail = sendEmail;
   vm.sendMessage = sendMessage;
   vm.searchAuthors = searchAuthors;
+  vm.openGoogleScholar = openGoogleScholar;
 
   function initPage(){
     vm.accountUserId = localStorage.getItem("userId");
     getAuthorDetails();  
+  }
+
+  function openGoogleScholar(articleName){
+      self.location = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q="+articleName;
   }
 
   function getAuthorDetails() {
