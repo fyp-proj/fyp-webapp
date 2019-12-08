@@ -19,8 +19,8 @@ function userService($http) {
     });
 	}
 
-	function signUp(firstName, lastName, email, password, confirmationPassword){
-    var registerObj= {firstName: firstName, lastName:lastName, email:email, password:password, password_confirmation:confirmationPassword};
+	function signUp(firstName, lastName, email, password, confirmationPassword, role){
+    var registerObj= {firstName: firstName, lastName:lastName, email:email, password:password, password_confirmation:confirmationPassword, role:role};
     return $http({
       method: 'POST',
       url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/register',

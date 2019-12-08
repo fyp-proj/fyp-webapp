@@ -21,11 +21,16 @@ function authorsProjectsService($http) {
 
 
 
-  function getAllAuthors(page){
+  function getAllAuthors(page, brId){
+    var param = '';
+    if(brId)
+        param = '&brId='+brId;
+    else 
+      param = 'page='+page;
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/all?page='+page
+      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/authors/all?'+param
     });
   }
 

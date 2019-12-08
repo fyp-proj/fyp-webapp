@@ -21,6 +21,7 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.reviewedRequests = [];
 	vm.onGoing=false;
 	vm.addCollabs = [];
+	vm.addRevs = [];
 	vm.loadAuthors = false;
 
 	vm.createPost = createPost;
@@ -36,8 +37,11 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.deleteNotif = deleteNotif;
 	vm.requestOnGoingArticle = requestOnGoingArticle;
 	vm.addCollaborators = addCollaborators;
+	vm.addReviewers = addReviewers;
 	vm.searchAuthors = searchAuthors;
 	vm.removeCol = removeCol;
+	vm.removeRev = removeRev;
+	vm.getReviewers = getReviewers;
 	vm.logout = logout;
 
 	function initPage(){
@@ -55,6 +59,11 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
   	function removeCol(index){
   		vm.addCollabs.splice(index,1);
   	}
+
+  	function removeRev(index){
+  		vm.addRevs.splice(index, 1);
+  	}
+
   	function addCollaborators(){
   		for (var i=0; i < vm.allAuthors.data.length; i++) {
 	        if (vm.allAuthors.data[i].id == vm.addColl) {
@@ -63,6 +72,15 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	        }
     	}
   		
+  	}
+
+  	function addReviewers(){
+  		for (var i=0; i < vm.reviewers.length; i++) {
+	        if (vm.reviewers[i].id == vm.addRev) {
+	            vm.addRevs.push({id:vm.reviewers[i].id, name:vm.reviewers[i].firstName+' '+vm.reviewers[i].lastName});
+	            break;
+	        }
+    	}
   	}
 
   	function myFunction() {
@@ -122,7 +140,11 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		for(var i =0; i<vm.addCollabs.length; i++){
 			collIds[i]=vm.addCollabs[i].id;
 		}
-		vm.articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: collIds, ongoing:vm.onGoing};
+		var revIds = [];
+		for(var i =0; i<vm.addRevs.length; i++){
+			revIds[i]=vm.addRevs[i].id;
+		}
+		vm.articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: collIds, ongoing:vm.onGoing, reviewers:revIds};
 		homeService.createPost(vm.articleObj).then(function(resp){
 			if(resp.data.status=='success'){
 				alert(resp.data.message);
@@ -161,6 +183,13 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
       		vm.authors = resp.data.data;
     	});
 	}
+
+	function getReviewers(brId){
+		authorsProjectsService.getAllAuthors(null, brId).then(function(resp){
+      		vm.reviewers = resp.data.data;
+    	});
+	}
+
 	function loadNewsFeed(){
 		homeService.loadNewsFeed().then(function(resp){
 			vm.newsFeed = resp.data.data;

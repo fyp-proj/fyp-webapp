@@ -304,7 +304,7 @@
             </div>
             <div class="col-lg-12">
               <div class="inp-field">
-                <select ng-model="ctrl.brId">
+                <select ng-model="ctrl.brId" ng-change="ctrl.getReviewers(ctrl.brId)">
                   <option selected="selected" ng-value="''" disabled> select a br</option>
                   <option ng-repeat="br in ctrl.brIds.data" ng-bind="br.name" ng-value="br.id"></option>
                 </select>
@@ -339,20 +339,19 @@
                   <div ng-repeat="col in ctrl.addCollabs">
                     <li style="float:left" ng-init="col.index = $index" ng-bind="col.name"></li><span style="color:red;margin-left:10px;cursor:pointer" ng-click="ctrl.removeCol(col.index)">x</span>
                   </div>
-                  <!-- <button class="follow" ng-click="ctrl.sendMessage(art.title)">send request</button> -->
             </div>
 
-
-
-            <!-- <div class="col-lg-6">
-              <div> -->
-                <!-- <span ng-repeat="col in ctrl.authors" ng-bind="col"> </span> -->
-              <!--   <span ng-repeat="auth in ctrl.authors"></span>
-              </div>
-            </div> -->
-            <!-- <div class="col-lg-12">
-              <textarea name="description" placeholder="Description"></textarea>
-            </div> -->
+            <div class="col-lg-6">
+               <select ng-model="ctrl.addRev" ng-if="ctrl.reviewers" ng-change="ctrl.addReviewers()">
+                    <option selected="selected" ng-value="''" disabled> select a reviewer</option>
+                    <option ng-repeat="rev in ctrl.reviewers" ng-bind="rev.firstName + ' '+ rev.lastName" ng-value="rev.id"></option>
+                  </select>
+            </div>
+            <div class="col-lg-6">
+              <div ng-repeat="rev in ctrl.addRevs">
+                    <li style="float:left" ng-init="rev.index = $index" ng-bind="rev.name"></li><span style="color:red;margin-left:10px;cursor:pointer" ng-click="ctrl.removeRev(rev.index)">x</span>
+                  </div>
+            </div>
             <div class="col-lg-12">
               <ul>
                 <li><button href="#" class="active" type="submit" ng-click="ctrl.createPost()" value="post">Post</button></li>

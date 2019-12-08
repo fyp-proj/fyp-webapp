@@ -15,6 +15,7 @@ angular.module("main").controller("mainController",mainController );
    vm.password = '';
    vm.passwordConfirmation = '';
    vm.signedIn = false;
+   vm.role = 0;
    vm.gmail = {
      username:'',
      email:''
@@ -91,7 +92,7 @@ angular.module("main").controller("mainController",mainController );
    }
 
    function signUp(){
-     userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation).then(function(resp){
+     userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation, vm.role).then(function(resp){
        if(resp.data.status == 'success'){
          localStorage.apiToken =  resp.data.api_token;
          localStorage.userId =  resp.data.user.id;
