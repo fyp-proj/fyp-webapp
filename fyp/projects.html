@@ -90,7 +90,11 @@
 				                <div class="nott-list">
 				                  <div class="notfication-details">
 				                    <div class="notification-info" ng-repeat="request in ctrl.reviewRequests">
-				                      <h3><a href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> <p ng-bind="request.message"></p></h3>
+				                      <h3>
+				                      	<a ng-if="request.status == 3 && request.fromUserId != ctrl.userProfile.id" href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> 
+                        				<a ng-if="request.status!= 3 && request.fromUserId == ctrl.userProfile.id" href="#" title="" ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name"></a>
+				                      	 <p ng-bind="request.message">
+				                      	</p></h3>
 				                      <div style="clear:both">
 				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id)">Accept</button>
 				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
@@ -199,8 +203,8 @@
 																<div class="job_descp" style="margin-top: 10px;">
 					                        <a>BR Country: <p ng-bind="article.br.country"></p></a>
 					                        <a>BR Name: <p ng-bind="article.br.name"></p></a>
-					                        <div ng-if="article.re3DataLink">Re3Data link: <a style="cursor:pointer" href="article.re3DataLink"
-					                        	ng-bind="article.re3DataLink"></a></div>
+					                        <div ng-if="article.reLink">Re3Data link: <a style="cursor:pointer" href="article.reLink"
+					                        	ng-bind="article.reLink"></a></div>
 				                        	<div ng-if="article.reviewing[0]" style="float:right">  
 										    	<p style="color:#FF0000"> This article is in review of '{{article.reviewing[0].firstName}} {{article.reviewing[0].lastName}}'</p>
 										    </div>

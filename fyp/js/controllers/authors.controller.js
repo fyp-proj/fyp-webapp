@@ -140,7 +140,10 @@ function authorController($http, $window, authorsProjectsService, $location, use
     else
       var socialMedia = {};
     var SM = JSON.stringify(socialMedia);
-    var profileObj = {firstName: vm.userProfile.firstName, lastName:vm.userProfile.lastName, institution:vm.userProfile.institution, socialMedia:SM, id:vm.userProfile.id, roles:[vm.role]};
+    if(userProfile.roles[0] == 1)
+      var profileObj = {firstName: vm.userProfile.firstName, lastName:vm.userProfile.lastName, institution:vm.userProfile.institution, socialMedia:SM, id:vm.userProfile.id, roles:[vm.role]};
+    else var profileObj = {firstName: vm.userProfile.firstName, lastName:vm.userProfile.lastName, institution:vm.userProfile.institution, socialMedia:SM, id:vm.userProfile.id};
+
     authorsProjectsService.editProfile(profileObj).then(function(resp){
       vm.userProfile = resp.data.user;
     });

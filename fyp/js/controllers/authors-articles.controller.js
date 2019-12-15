@@ -1,8 +1,8 @@
 angular.module('main').controller('authorsArticlesController',authorsArticlesController);
 
-authorsArticlesController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'userService', 'homeService'];
+authorsArticlesController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'userService', 'homeService', '$anchorScroll'];
 
-function authorsArticlesController($http, $window, authorsProjectsService, $location, userService, homeService){
+function authorsArticlesController($http, $window, authorsProjectsService, $location, userService, homeService, $anchorScroll){
 
   var vm = this;
 
@@ -61,18 +61,22 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     }
     authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
         vm.userProfile = resp.data.data;
-        homeService.getReviewRequest().then(function(resp){
-          vm.reviewRequests = resp.data.data;
+        var database = firebase.database();
+        var starCountRef = database.ref('chat'+vm.accountUserId);
+        starCountRef.on('value', function(snapshot) {
+          homeService.getReviewRequest().then(function(resp){
+            vm.reviewRequests = resp.data.data;
+          });
         });
     });
-    var database = firebase.database();
-    var starCountRef = database.ref('chat'+vm.accountUserId);
-    starCountRef.on('value', function(snapshot) {
-      vm.array = snapshot.val();
-      homeService.getReviewRequest().then(function(resp){
-      vm.reviewRequests = resp.data.data;
-     });
-    });
+    // var database = firebase.database();
+    // var starCountRef = database.ref('chat'+vm.accountUserId);
+    // starCountRef.on('value', function(snapshot) {
+    //   vm.array = snapshot.val();
+    //   homeService.getReviewRequest().then(function(resp){
+    //   vm.reviewRequests = resp.data.data;
+    //  });
+    // });
   }
 
   function deleteNotif(chatId){
@@ -268,7 +272,8 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
 
   function editArticle(articleObj){
     articleObj.reviewers = vm.userProfile.id;
-    articleObj.re3DataLink = vm.re3data ;
+    if(vm.re3data)
+      articleObj.reLink = vm.re3data ;
     authorsProjectsService.editArticle(articleObj, articleObj.id).then(function(resp){
 
     });
