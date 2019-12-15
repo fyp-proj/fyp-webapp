@@ -28,7 +28,7 @@
 			<div class="container">
 				<div class="header-data">
 					<div class="logo">
-						<a href="homePage.html" title=""><img src="images/logo.png" alt=""></a>
+						<a href="homePage.html" title=""><img src="images/mainLogo.png" style="width: 50px;"alt=""></a>
 					</div><!--logo end-->
 					<div class="search-bar">
 						<form>
@@ -82,59 +82,35 @@
 									Messages
 								</a>
 							</li>
-							<li>
-								<a href="#" title="" class="not-box-open">
-									<span><img src="images/icon7.png" alt=""></span>
-									Notification
-								</a>
-								<div class="notification-box noti" id="notification">
-									<div class="nt-title">
-										<h4>Setting</h4>
-										<a href="#" title="">Clear all</a>
-									</div>
-									<div class="nott-list">
-										<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img1.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img2.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img3.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img2.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="view-all-nots">
-						  					<a href="#" title="">View All Notification</a>
-						  				</div>
-									</div><!--nott-list end-->
-								</div><!--notification-box end-->
-							</li>
+							<li style="height:0px !important">
+				              <a href="#" title="" class="not-box-open" >
+				                <span><img src="images/icon7.png" alt=""></span>
+				                Notification
+				                  <span class="badge1" ng-bind="ctrl.reviewRequests.length"></span>
+				              </a>
+				              <div class="notification-box noti" id="notification">
+				                <div class="nott-list">
+				                  <div class="notfication-details">
+				                    <div class="notification-info" ng-repeat="request in ctrl.reviewRequests">
+				                      <h3><a href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> <p ng-bind="request.message"></p></h3>
+				                      <div style="clear:both">
+				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id)">Accept</button>
+				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
+				                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
+				                      </div>
+				                      <span style="display: contents;" ng-bind="request.created_at"></span>
+				                      
+				                    </div>
+				                    <!--notification-info -->
+				                  </div>
+				                  <div class="view-all-nots">
+				                    <a style="padding:5px 0" title="">All Notifications</a>
+				                  </div>
+				                </div>
+				                <!--nott-list end-->
+				              </div>
+				              <!--notification-box end-->
+				            </li>
 						</ul>
 					</nav><!--nav end-->
 					<div class="menu-btn">
@@ -147,41 +123,7 @@
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
-							<h3>Online Status</h3>
-							<ul class="on-off-status">
-								<li>
-									<div class="fgt-sec">
-										<input type="radio" name="cc" id="c5">
-										<label for="c5">
-											<span></span>
-										</label>
-										<small>Online</small>
-									</div>
-								</li>
-								<li>
-									<div class="fgt-sec">
-										<input type="radio" name="cc" id="c6">
-										<label for="c6">
-											<span></span>
-										</label>
-										<small>Offline</small>
-									</div>
-								</li>
-							</ul>
-							<h3>Custom Status</h3>
-							<div class="search_form">
-								<form>
-									<input type="text" name="search">
-									<button type="submit">Ok</button>
-								</form>
-							</div><!--search_form end-->
-							<h3>Setting</h3>
-							<ul class="us-links">
-								<li><a href="profile-account-setting.html" title="">Account Setting</a></li>
-								<li><a href="#" title="">Privacy</a></li>
-								<li><a href="#" title="">Faqs</a></li>
-								<li><a href="#" title="">Terms & Conditions</a></li>
-							</ul>
+							<h3 class="tc"><a href="user-profile.html?userId={{ctrl.accountUserId}}">My Profile</a></h3>
 							<h3 class="tc"><a ng-click="ctrl.logout()" title="">Logout</a></h3>
 						</div><!--user-account-settingss end-->
 					</div>
@@ -208,8 +150,6 @@
 										</div><!--user-pro-img end-->
 										<div class="user_pro_status">
 											<ul class="flw-hr">
-												<li><a  title="" class="flww"><i class="la la-plus"></i> Follow</a></li>
-												
 											</ul>
 										</div><!--user_pro_status end-->
 									</div><!--user_profile end-->
@@ -218,11 +158,19 @@
 							<div class="col-lg-6">
 								<div class="main-ws-sec">
 									<div class="user-tab-sec">
-										<h3 ng-bind="ctrl.userProfile.data.firstName + ' ' +ctrl.userProfile.data.lastName"></h3>
+										<h3 ng-bind="ctrl.userProfile.firstName + ' ' +ctrl.userProfile.lastName"></h3>
+										
 										<div class="star-descp">
-											<span ng-bind="ctrl.userProfile.data.email"></span>
-											<span ng-bind="ctrl.userProfile.data.institution"></span>
+											<div><span style="font-weight:bold">Email:</span><span ng-bind="ctrl.userProfile.email"></span></div>
+											<div> <span style="font-weight:bold">Institution:</span><span ng-bind="ctrl.userProfile.institution"></span></div>
 										</div><!--star-descp end-->
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.linkedin"><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 30px;" alt=""><a href="ctrl.userProfile.socialMedia.linkedin" ng-bind="ctrl.userProfile.socialMedia.linkedin"></a></div>
+
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.academia"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt=""><a href="ctrl.userProfile.socialMedia.academia" ng-bind="ctrl.userProfile.socialMedia.academia"></a></div>
+
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.facebook"><img style="margin:0 30px 0 3px;width:30px;" src="images/fblogo.png" alt=""><a href="ctrl.userProfile.socialMedia.facebook" ng-bind="ctrl.userProfile.socialMedia.facebook"></a></div>
+
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.instagram"><img src="images/instalogo.png" style="width:35px;margin-right:30px" alt=""><a href="ctrl.userProfile.socialMedia.instagram" ng-bind="ctrl.userProfile.socialMedia.instagram"></a></div>
 										<div class="tab-feed">
 											<ul>
 												<li data-tab="feed-dd" class="active">
@@ -234,19 +182,13 @@
 												<li data-tab="info-dd">
 													<a href="#" title="">
 														<img src="images/ic2.png" alt="">
-														<span>Info</span>
+														<span>Edit Info</span>
 													</a>
-												</li>
-												<li data-tab="portfolio-dd">
-													<a href="#" title="">
-														<img src="images/ic3.png" alt="">
-														<span>Portfolio</span>
-                          </a>
 												</li>
 											</ul>
 										</div><!-- tab-feed end-->
 									</div><!--user-tab-sec end-->
-									<div class="product-feed-tab current" ng-repeat="art in ctrl.userProfile.data.articles" style="width:800px !important;" id="feed-dd">
+									<div class="product-feed-tab current" ng-repeat="art in ctrl.userProfile.articles" style="width:800px !important;" id="feed-dd">
                     					<div class="posts-section">
 											<div class="post-bar">
 												<div class="job_descp">
@@ -257,6 +199,9 @@
 						                              <div>Country</div>
 						                              <p ng-bind="art.br.country"></p>
 												    </span>
+												    <div ng-if="art.reviewing[0]" style="float:right">  
+												    	<p style="color:#FF0000"> This article is in review of '{{art.reviewing[0].firstName}} {{art.reviewing[0].lastName}}'</p>
+												    </div>
                         						</div>
 												<div class="job-status-bar" ng-init="ctrl.showForm = false">
 													<ul class="like-com">
@@ -269,7 +214,7 @@
 												        	<option selected="selected" ng-value="''" disabled> select an author</option>
 												        	<option ng-repeat="auth in ctrl.allAuthors.data" ng-bind="auth.firstName + ' '+ auth.lastName" ng-value="auth.id"></option>
 												        </select>
-												        <button class="follow" ng-click="ctrl.sendMessage(art.title)">send request</button>
+												        <button class="follow" ng-click="ctrl.sendMessage(art.title, art.id)">send request</button>
 											        </form>
 												</div>
 											</div><!--post-bar end-->
@@ -278,111 +223,16 @@
 									</div><!--product-feed-tab end-->
 									<div class="product-feed-tab" id="info-dd">
 										<div class="user-profile-ov">
-											<h3>Overview</h3>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id. Vivamus sit amet augue nec urna efficitur tincidunt. Vivamus consectetur aliquam lectus commodo viverra. Nunc eu augue nec arcu efficitur faucibus. Aliquam accumsan ac magna convallis bibendum. Quisque laoreet augue eget augue fermentum scelerisque. Vivamus dignissim mollis est dictum blandit. Nam porta auctor neque sed congue. Nullam rutrum eget ex at maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget vestibulum lorem.</p>
+											<div>First Name: <input value="" ng-model="ctrl.userProfile.firstName" placeholder="first name" /></div>
+											<div>Last Name:  <input value="" ng-model="ctrl.userProfile.lastName" placeholder="last name" /></div>
+											<div>Institution:  <input value="" ng-model="ctrl.userProfile.institution" placeholder="institution" /></div>
+											<div style="font-weight:">Social Media:</div>
+											<div><div><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 5px;" alt=""> LinkedIn: <input value="" ng-model="ctrl.userProfile.socialMedia.linkedin" placeholder="" /></div>
+											 <div style="clear: both;"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt="">Academia: <input value="" ng-model="ctrl.userProfile.socialMedia.academia" placeholder="" /></div>
+											 <div style="clear: both;"><img style="margin:0 5px 0 3px;width:30px;" src="images/fblogo.png" alt="">Facebook: <input value="" ng-model="ctrl.userProfile.socialMedia.facebook" placeholder="" /></div>
+											 <div style="clear: both;"><img src="images/instalogo.png" style="width:35px;margin-right:5px" alt="">Instagram: <input value="" ng-model="ctrl.userProfile.socialMedia.instagram" placeholder="" /></div></div>
+											 <button style="margin: 10px;float: right;padding: 10px;" class="hire" ng-click="ctrl.editProfile()">Update Profile</button>
 										</div><!--user-profile-ov end-->
-										<div class="user-profile-ov st2">
-											<h3>Experience</h3>
-											<h4>Web designer</h4>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id. Vivamus sit amet augue nec urna efficitur tincidunt. Vivamus consectetur aliquam lectus commodo viverra. </p>
-											<h4>UI / UX Designer</h4>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id.</p>
-											<h4>PHP developer</h4>
-											<p class="no-margin">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id. Vivamus sit amet augue nec urna efficitur tincidunt. Vivamus consectetur aliquam lectus commodo viverra. </p>
-										</div><!--user-profile-ov end-->
-										<div class="user-profile-ov">
-											<h3>Education</h3>
-											<h4>Master of Computer Science</h4>
-											<span>2015 - 2018</span>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id. Vivamus sit amet augue nec urna efficitur tincidunt. Vivamus consectetur aliquam lectus commodo viverra. </p>
-										</div><!--user-profile-ov end-->
-										<div class="user-profile-ov">
-											<h3>Location</h3>
-											<h4>India</h4>
-											<p>151/4 BT Chownk, Delhi </p>
-										</div><!--user-profile-ov end-->
-										<div class="user-profile-ov">
-											<h3>Skills</h3>
-											<ul>
-												<li><a href="#" title="">HTML</a></li>
-												<li><a href="#" title="">PHP</a></li>
-												<li><a href="#" title="">CSS</a></li>
-												<li><a href="#" title="">Javascript</a></li>
-												<li><a href="#" title="">Wordpress</a></li>
-												<li><a href="#" title="">Photoshop</a></li>
-												<li><a href="#" title="">Illustrator</a></li>
-												<li><a href="#" title="">Corel Draw</a></li>
-											</ul>
-										</div><!--user-profile-ov end-->
-									</div><!--product-feed-tab end-->
-									<div class="product-feed-tab" id="portfolio-dd">
-										<div class="portfolio-gallery-sec">
-											<h3>Portfolio</h3>
-											<div class="gallery_pf">
-												<div class="row">
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img1.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img2.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img3.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img4.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img5.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img6.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img7.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img8.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img9.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-													<div class="col-lg-4 col-md-4 col-sm-6 col-6">
-														<div class="gallery_pt">
-															<img src="images/resources/pf-img10.jpg" alt="">
-															<a href="#" title=""><img src="images/all-out.png" alt=""></a>
-														</div><!--gallery_pt end-->
-													</div>
-												</div>
-											</div><!--gallery_pf end-->
-										</div><!--portfolio-gallery-sec end-->
 									</div><!--product-feed-tab end-->
 								</div><!--main-ws-sec end-->
 							</div>
@@ -413,5 +263,16 @@
 <script type="text/javascript" src="js/services/user.service.js"></script>
 <script type="text/javascript" src="js/services/home.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+<script>
+  var config = {
+      apiKey:'AIzaSyBP7BIlP-otdjgsjvaBhppqlh7b3dDBFWw',
+      authDomain: 'fyp-reserve.firebaseapp.com',
+      databaseURL: 'https://fyp-reserve.firebaseio.com/',
+      storageBucket:'fyp-reserve.appspot.com',
+      messagingSenderId:'219910147426'
+  };
+  firebase.initializeApp(config);
+</script>
 </body>
 </html>

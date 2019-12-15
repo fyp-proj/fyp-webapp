@@ -28,13 +28,13 @@
     <div class="container">
       <div class="header-data">
         <div class="logo">
-          <a href="homePage.html" title=""><img src="images/logo.png" alt=""></a>
+          <a href="homePage.html" title=""><img src="images/mainLogo.png" style="width: 50px;"alt=""></a>
         </div>
         <!--logo end-->
         <div class="search-bar">
           <form>
-            <input type="text" name="search" placeholder="Search...">
-            <button type="submit"><i class="la la-search"></i></button>
+            <input type="text" name="search" ng-model="ctrl.keyword" placeholder="Search...">
+            <button type="submit" ng-click="ctrl.searchArticles()"><i class="la la-search"></i></button>
           </form>
         </div>
         <!--search-bar end-->
@@ -96,7 +96,7 @@
                     <div class="notification-info" ng-repeat="request in ctrl.reviewRequests">
                       <h3><a href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> <p ng-bind="request.message"></p></h3>
                       <div style="clear:both">
-                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id)">Accept</button>
+                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id, request.articleId)">Accept</button>
                         <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
                         <button class="follow" ng-if="request.message=='accept' || request.message=='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
                       </div>
@@ -127,42 +127,7 @@
             <i class="la la-sort-down"></i>
           </div>
           <div class="user-account-settingss" id="users">
-            <h3>Online Status</h3>
-            <ul class="on-off-status">
-              <li>
-                <div class="fgt-sec">
-                  <input type="radio" name="cc" id="c5">
-                  <label for="c5">
-                    <span></span>
-                  </label>
-                  <small>Online</small>
-                </div>
-              </li>
-              <li>
-                <div class="fgt-sec">
-                  <input type="radio" name="cc" id="c6">
-                  <label for="c6">
-                    <span></span>
-                  </label>
-                  <small>Offline</small>
-                </div>
-              </li>
-            </ul>
-            <h3>Custom Status</h3>
-            <div class="search_form">
-              <form>
-                <input type="text" name="search">
-                <button type="submit">Ok</button>
-              </form>
-            </div>
-            <!--search_form end-->
-            <h3>Setting</h3>
-            <ul class="us-links">
-              <li><a href="profile-account-setting.html" title="">Account Setting</a></li>
-              <li><a href="#" title="">Privacy</a></li>
-              <li><a href="#" title="">Faqs</a></li>
-              <li><a href="#" title="">Terms & Conditions</a></li>
-            </ul>
+            <h3 class="tc"><a href="user-profile.html?userId={{ctrl.accountUserId}}">My Profile</a></h3>
             <h3 class="tc"><a ng-click="ctrl.logout()" title="">Logout</a></h3>
           </div>
           <!--user-account-settingss end-->
@@ -214,7 +179,7 @@
                   <!--post-st end-->
                 </div>
                 <!--post-topbar end-->
-                <div class="posts-section" ng-repeat="article in ctrl.newsFeed track by $index">
+                <div class="posts-section" ng-repeat="article in ctrl.newsFeed.data track by $index">
                   <div class="post-bar">
                     <div class="post_topbar">
                       <div class="usy-dt">
@@ -248,8 +213,13 @@
                     <div class="job_descp">
                       BR Name:<h3 ng-bind="article.br.name"></h3>
                       BR Country:<h3 ng-bind="article.br.country"></h3>
+                      <div ng-if="article.re3DataLink">Re3Data link: <a style="cursor:pointer" href="article.re3DataLink"
+                                    ng-bind="article.re3DataLink"></a></div>
                       <p><h3 style="color:red" href="#" title="" ng-bind="article.title"></h3></p>
-                    </div3
+                    </div>
+                    <div ng-if="article.reviewing[0]" style="float:right">  
+                      <p style="color:#FF0000"> This article is in review of '{{article.reviewing[0].firstName}} {{article.reviewing[0].lastName}}'</p>
+                    </div>
                     <div class="job-status-bar" ng-init="show = false">
                       <ul class="like-com">
                         <li>
@@ -331,7 +301,7 @@
               <input style="float: left;width: 10px !important;margin-right: 10px;margin-top: -8px;" type="checkbox" ng-model="ctrl.onGoing" checked>
               <div>On going article</div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6" ng-if="!ctrl.onGoing">
                <select ng-model="ctrl.addColl" ng-if="ctrl.allAuthors.data" ng-change="ctrl.addCollaborators()">
                     <option selected="selected" ng-value="''" disabled> select an author</option>
                     <option ng-repeat="auth in ctrl.allAuthors.data" ng-bind="auth.firstName + ' '+ auth.lastName" ng-value="auth.id"></option>
@@ -514,6 +484,13 @@
       </div>
     </div>
   </div> -->
+  <div style="font-size: 16px;margin-left: 450px;margin-top:30px;margin-bottom:20px;">
+      <button ng-if="ctrl.currentPage>1" style="padding:5px;" class="follow" ng-click="ctrl.pageChanged(true, 1)">first page</button>
+      <button ng-if="ctrl.currentPage>1" style="padding:5px;" class="follow" ng-click="ctrl.pageChanged(true, null)">previous page</button>
+      <span>Page <span ng-bind="ctrl.currentPage"></span> of <span ng-bind="ctrl.newsFeed.pagination.total_pages"></span> </span>
+      <button ng-if="ctrl.currentPage < ctrl.newsFeed.pagination.total_pages" style="padding:5px;" class="hire" ng-click="ctrl.pageChanged(false, null)">next page</button>
+      <button ng-if="ctrl.currentPage != ctrl.newsFeed.pagination.total_pages" style="padding:5px;" class="hire" ng-click="ctrl.pageChanged(false, ctrl.newsFeed.pagination.total_pages)">last page</button>
+    </div>
 </div>
 </body>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -533,6 +510,17 @@
 <script type="text/javascript" src="js/services/user.service.js"></script>
 <script type="text/javascript" src="js/services/home.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+<script>
+  var config = {
+      apiKey:'AIzaSyBP7BIlP-otdjgsjvaBhppqlh7b3dDBFWw',
+      authDomain: 'fyp-reserve.firebaseapp.com',
+      databaseURL: 'https://fyp-reserve.firebaseio.com/',
+      storageBucket:'fyp-reserve.appspot.com',
+      messagingSenderId:'219910147426'
+  };
+  firebase.initializeApp(config);
+</script>
 
 
 </html>

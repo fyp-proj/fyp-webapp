@@ -20,7 +20,7 @@ function homeService($http) {
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/br/all'
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/br/all'
     });
   }
   function createPost(articleObj){
@@ -28,7 +28,7 @@ function homeService($http) {
       method: 'POST',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
       data: articleObj,
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/articles/create'
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/articles/create'
     });
   }
 
@@ -37,7 +37,7 @@ function homeService($http) {
       method: 'POST',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
       data: commentObj,
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/comment/create/' + articleId
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/comment/create/' + articleId
     });
   }
 
@@ -45,7 +45,7 @@ function homeService($http) {
   	return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/comment/get/' + articleId
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/comment/get/' + articleId
     });
   }
 
@@ -53,7 +53,7 @@ function homeService($http) {
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/notifications/get',
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/notifications/get',
     });
   }
 
@@ -62,15 +62,15 @@ function homeService($http) {
       method: 'POST',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
       data: requestObj,
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/chats/update',
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/chats/update',
     });
   }
 
-  function loadNewsFeed(){
+  function loadNewsFeed(page){
   	return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/articles/newsfeed'
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/articles/newsfeed?page='+page
     });
   }
 
@@ -78,7 +78,7 @@ function homeService($http) {
   	return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/notifications/delete/'+chatId
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/notifications/delete/'+chatId
     });
   }
 

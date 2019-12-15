@@ -15,7 +15,7 @@ function userService($http) {
 		return $http({
       method: 'POST',
       data: loginObj,
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/login'
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/login'
     });
 	}
 
@@ -23,7 +23,7 @@ function userService($http) {
     var registerObj= {firstName: firstName, lastName:lastName, email:email, password:password, password_confirmation:confirmationPassword, role:role};
     return $http({
       method: 'POST',
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/register',
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/register',
       data: registerObj,
       headers: {'Content-Type': 'application/json',  'Access-Controle-Allow-Origin':'*',}
     });
@@ -32,7 +32,7 @@ function userService($http) {
   function logOut(api_token){
     return $http({
       method: 'GET',
-      url: 'http://ec2-3-16-180-27.us-east-2.compute.amazonaws.com/api/v1/logout?api_token='+api_token,
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/logout?api_token='+api_token,
       headers:{Authorization: "Bearer " + localStorage.getItem("apiToken")},
       headers: {'Content-Type': 'application/json',  'Access-Controle-Allow-Origin':'*',}
     });

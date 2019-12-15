@@ -6,6 +6,9 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 
 	var vm = this;
 
+	vm.totalItems = 15;
+	vm.currentPage = 1;
+	vm.itemsPerPage = 1;
 	vm.articleObj = {};
 	vm.keywords = '';
 	vm.year = null;
@@ -42,6 +45,8 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.removeCol = removeCol;
 	vm.removeRev = removeRev;
 	vm.getReviewers = getReviewers;
+	vm.pageChanged = pageChanged;
+	vm.searchArticles = searchArticles;
 	vm.logout = logout;
 
 	function initPage(){
@@ -53,8 +58,27 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	   		});
     	});
 	    vm.loadNewsFeed();
-	    // vm.getAuthors();
+	    vm.getAuthors();
+     	var database = firebase.database();
+        var starCountRef = database.ref('chat'+vm.accountUserId);
+        starCountRef.on('value', function(snapshot) {
+          vm.array = snapshot.val();
+          homeService.getReviewRequest().then(function(resp){
+		    	vm.reviewRequests = resp.data.data;
+	   		});
+      	});
+	    
   	}
+
+
+
+  	function searchArticles(){
+	    vm.loadArticles = true;
+	    authorsProjectsService.searchArticles(vm.currentPage, vm.keyword).then(function(resp){
+	      vm.newsFeed = resp.data;
+	      vm.loadArticles = false;
+	    });
+	}
 
   	function removeCol(index){
   		vm.addCollabs.splice(index,1);
@@ -89,24 +113,38 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 
 	function deleteNotif(chatId){
 		homeService.deleteNotif(chatId).then(function(resp){
+			var found = vm.reviewRequests.find(function(element) { 
+			  return element.id == chatId; 
+			});
+			vm.reviewRequests.splice(vm.reviewRequests.indexOf(found),1);
 		});
 	}
 
-	function updateRequest(confirmation, chatId){
+	function updateRequest(confirmation, chatId, articleId){
 		if(confirmation){
 			var status = 2;
 			var message ="accept"
+			var articleId = articleId;
+			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId};
 		}
 		else {
 			var status = 1;
 			var message = "reject";
+			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification'};
 		}
-		var requestObj = {chatId: chatId, message: message, status: status, type: 'notification'};
+		
 		homeService.updateRequest(requestObj).then(function(resp){
 			// vm.reviewRequests.splice(vm.reviewRequests.indexOf(index));
 			if(resp.data.success){
 				alert('The request is '+ message + 'ed');
-				$window.location.href= "/messages.html";
+				if(message == 'accept')
+					$window.location.href= "/messages.html";
+				else{
+					var found = vm.reviewRequests.find(function(element) { 
+					  return element.id == chatId; 
+					});
+					vm.reviewRequests.splice(vm.reviewRequests.indexOf(found),1);
+				}
 			}
 		});
 	}
@@ -147,11 +185,22 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		vm.articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: collIds, ongoing:vm.onGoing, reviewers:revIds};
 		homeService.createPost(vm.articleObj).then(function(resp){
 			if(resp.data.status=='success'){
+				for(var i =0; i<revIds.length; i++){
+					sendRequestReviewer(vm.title, revIds[i]);
+				}
 				alert(resp.data.message);
 				$window.location.href = "/homePage.html";
 			}
 			
 		});
+	}
+
+	function sendRequestReviewer(articleName, toUser){
+	   var messageObj = {toUser: toUser, message:'review request for article ' + articleName, status:3, type:"notification"};
+	   authorsProjectsService.sendMessages(messageObj).then(function(resp){
+	     if(resp.data.status=='success')
+	       alert("Your request is sent successfuly!");
+	   });
 	}
 
 	function cancel(){
@@ -191,8 +240,8 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	}
 
 	function loadNewsFeed(){
-		homeService.loadNewsFeed().then(function(resp){
-			vm.newsFeed = resp.data.data;
+		homeService.loadNewsFeed(vm.currentPage).then(function(resp){
+			vm.newsFeed = resp.data;
 		});
 	}
 
@@ -203,6 +252,15 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	      vm.loadAuthors = false;
 	    });
   	}
+
+  	function pageChanged (prev, page, type){
+	    if(prev)
+	      vm.currentPage--;
+	    else vm.currentPage ++;
+	    if(page)
+	      vm.currentPage = page;
+	    vm.loadNewsFeed();
+	}
 
 	function logout(){
      var key = localStorage.getItem("apiToken");

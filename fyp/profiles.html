@@ -35,7 +35,7 @@
 			<div class="container">
 				<div class="header-data">
 					<div class="logo">
-						<a href="homePage.html" title=""><img src="images/logo.png" alt=""></a>
+						<a href="homePage.html" title=""><img src="images/mainLogo.png" style="width: 50px;"alt=""></a>
 					</div><!--logo end-->
 					<div class="search-bar">
 						<form>
@@ -89,59 +89,35 @@
 									Messages
 								</a>
 							</li>
-							<li>
-								<a href="#" title="" class="not-box-open">
-									<span><img src="images/icon7.png" alt=""></span>
-									Notification
-								</a>
-								<div class="notification-box noti" id="notification">
-									<div class="nt-title">
-										<h4>Setting</h4>
-										<a href="#" title="">Clear all</a>
-									</div>
-									<div class="nott-list">
-										<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img1.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img2.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img3.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="notfication-details">
-							  				<div class="noty-user-img">
-							  					<img src="images/resources/ny-img2.png" alt="">
-							  				</div>
-							  				<div class="notification-info">
-							  					<h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-							  					<span>2 min ago</span>
-							  				</div><!--notification-info -->
-						  				</div>
-						  				<div class="view-all-nots">
-						  					<a href="#" title="">View All Notification</a>
-						  				</div>
-									</div><!--nott-list end-->
-								</div><!--notification-box end-->
-							</li>
+							<li style="height:0px !important">
+				              <a href="#" title="" class="not-box-open" >
+				                <span><img src="images/icon7.png" alt=""></span>
+				                Notification
+				                  <span class="badge1" ng-bind="ctrl.reviewRequests.length"></span>
+				              </a>
+				              <div class="notification-box noti" id="notification">
+				                <div class="nott-list">
+				                  <div class="notfication-details">
+				                    <div class="notification-info" ng-repeat="request in ctrl.reviewRequests">
+				                      <h3><a href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> <p ng-bind="request.message"></p></h3>
+				                      <div style="clear:both">
+				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id)">Accept</button>
+				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
+				                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
+				                      </div>
+				                      <span style="display: contents;" ng-bind="request.created_at"></span>
+				                      
+				                    </div>
+				                    <!--notification-info -->
+				                  </div>
+				                  <div class="view-all-nots">
+				                    <a style="padding:5px 0" title="">All Notifications</a>
+				                  </div>
+				                </div>
+				                <!--nott-list end-->
+				              </div>
+				              <!--notification-box end-->
+				            </li>
 						</ul>
 					</nav><!--nav end-->
 					<div class="menu-btn">
@@ -154,41 +130,7 @@
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
-							<h3>Online Status</h3>
-							<ul class="on-off-status">
-								<li>
-									<div class="fgt-sec">
-										<input type="radio" name="cc" id="c5">
-										<label for="c5">
-											<span></span>
-										</label>
-										<small>Online</small>
-									</div>
-								</li>
-								<li>
-									<div class="fgt-sec">
-										<input type="radio" name="cc" id="c6">
-										<label for="c6">
-											<span></span>
-										</label>
-										<small>Offline</small>
-									</div>
-								</li>
-							</ul>
-							<h3>Custom Status</h3>
-							<div class="search_form">
-								<form>
-									<input type="text" name="search">
-									<button type="submit">Ok</button>
-								</form>
-							</div><!--search_form end-->
-							<h3>Setting</h3>
-							<ul class="us-links">
-								<li><a href="profile-account-setting.html" title="">Account Setting</a></li>
-								<li><a href="#" title="">Privacy</a></li>
-								<li><a href="#" title="">Faqs</a></li>
-								<li><a href="#" title="">Terms & Conditions</a></li>
-							</ul>
+							<h3 class="tc"><a href="user-profile.html?userId={{ctrl.accountUserId}}">My Profile</a></h3>
 							<h3 class="tc"><a ng-click="ctrl.logout()" title="">Logout</a></h3>
 						</div><!--user-account-settingss end-->
 					</div>
@@ -218,14 +160,12 @@
               <h4 ng-if="profile.institution!='empty'" ng-bind="profile.institution"></h4>
               <h4 ng-if="profile.email!='empty'" ng-bind="profile.email"></h4>
               <ul>
-                <li><a href="#" title="" class="follow">Follow</a></li>
                 <!-- <li><a ng-click="ctrl.sendEmail()" title="" class="message-us"><i class="fa fa-envelope"></i></a>
                 </li> -->
                 <!-- <li ><a class="message-us post-jb active" ng-click="" href="#" title="">send email</a>
                 </li> -->
                 <li id="test{{$index}}"><a class="post-jb active message-us" ng-click="ctrl.recipientId = profile.id" href="" title="">send email</a>
                 </li>
-                <li><a href="#" title="" class="hire-us">Hire</a></li>
               </ul>
             </div>
             <a href="my-profile-feed.html?userId={{profile.id}}" title="" class="view-more-pro">View Profile</a>
@@ -297,6 +237,17 @@
 <script type="text/javascript" src="js/services/user.service.js"></script>
 <script type="text/javascript" src="js/services/home.service.js"></script>
 <script type="text/javascript" src="js/services/authors-projects.service.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+<script>
+  var config = {
+      apiKey:'AIzaSyBP7BIlP-otdjgsjvaBhppqlh7b3dDBFWw',
+      authDomain: 'fyp-reserve.firebaseapp.com',
+      databaseURL: 'https://fyp-reserve.firebaseio.com/',
+      storageBucket:'fyp-reserve.appspot.com',
+      messagingSenderId:'219910147426'
+  };
+  firebase.initializeApp(config);
+</script>
 
 </body>
 </html>

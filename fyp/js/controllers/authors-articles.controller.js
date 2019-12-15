@@ -1,8 +1,8 @@
 angular.module('main').controller('authorsArticlesController',authorsArticlesController);
 
-authorsArticlesController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'userService'];
+authorsArticlesController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'userService', 'homeService'];
 
-function authorsArticlesController($http, $window, authorsProjectsService, $location, userService){
+function authorsArticlesController($http, $window, authorsProjectsService, $location, userService, homeService){
 
   var vm = this;
 
@@ -25,6 +25,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   vm.recipientId = null;
   vm.messagedUsers = [];
   vm.messagesArray = [];
+  vm.reviewRequests = [];
 
   vm.getAllAuthors = getAllAuthors;
   vm.getAllArticles = getAllArticles;
@@ -38,10 +39,13 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   vm.showCollaborators = showCollaborators;
   vm.getMessages = getMessages;
   vm.sendMessages = sendMessages;
-  vm.logout = logout;
   vm.getChats = getChats;
+  vm.editArticle = editArticle;
+  vm.deleteNotif = deleteNotif;
+  vm.updateRequest = updateRequest;
+  vm.logout = logout;
 
-  
+
 
   function initPage(){
     vm.accountUserId = localStorage.getItem("userId");
@@ -58,6 +62,52 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     }
     authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
         vm.userProfile = resp.data.data;
+        homeService.getReviewRequest().then(function(resp){
+          vm.reviewRequests = resp.data.data;
+        });
+    });
+    var database = firebase.database();
+    var starCountRef = database.ref('chat'+vm.accountUserId);
+    starCountRef.on('value', function(snapshot) {
+      vm.array = snapshot.val();
+      homeService.getReviewRequest().then(function(resp){
+      vm.reviewRequests = resp.data.data;
+     });
+    });
+  }
+
+  function deleteNotif(chatId){
+    homeService.deleteNotif(chatId).then(function(resp){
+      var found = vm.reviewRequests.find(function(element) { 
+        return element.id == chatId; 
+      });
+      vm.reviewRequests.splice(vm.reviewRequests.indexOf(found),1);
+    });
+  }
+
+  function updateRequest(confirmation, chatId){
+    if(confirmation){
+      var status = 2;
+      var message ="accept"
+    }
+    else {
+      var status = 1;
+      var message = "reject";
+    }
+    var requestObj = {chatId: chatId, message: message, status: status, type: 'notification'};
+    homeService.updateRequest(requestObj).then(function(resp){
+      // vm.reviewRequests.splice(vm.reviewRequests.indexOf(index));
+      if(resp.data.success){
+        alert('The request is '+ message + 'ed');
+        if(message == 'accept')
+          $window.location.href= "/messages.html";
+        else{
+          var found = vm.reviewRequests.find(function(element) { 
+            return element.id == chatId; 
+          });
+          vm.reviewRequests.splice(vm.reviewRequests.indexOf(found),1);
+        }
+      }
     });
   }
 
@@ -105,22 +155,24 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     });
   }
 
-  function searchAuthors(){
+  function searchAuthors(inMessages){
     vm.loadAuthors = true;
     authorsProjectsService.searchAuthors(vm.search, vm.currentPage).then(function(resp){
       vm.allAuthors = resp.data;
       vm.loadAuthors = false;
     });
-    setTimeout(function(){
-      for(var i=0; i<vm.allAuthors.data.length; i++){
-        var mail = document.getElementById("test"+i);
-        mail.classList.add('post-jb');
-        mail.addEventListener("click", function() {
-          $(".post-popup.job_post").addClass("active");
-          $(".wrapper").addClass("overlay");
-        }, false)}
-      }
-    ,1500);
+    if(!inMessages){
+      setTimeout(function(){
+        for(var i=0; i<vm.allAuthors.data.length; i++){
+          var mail = document.getElementById("test"+i);
+          mail.classList.add('post-jb');
+          mail.addEventListener("click", function() {
+            $(".post-popup.job_post").addClass("active");
+            $(".wrapper").addClass("overlay");
+          }, false)}
+        }
+      ,1500);
+    }
   }
 
   function pageChanged (prev, page, type){
@@ -161,27 +213,41 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     }
     else user = toUser.id;
 
-    // var database = firebase.database();
-    // var starCountRef = database.ref('chat'+vm.accountUserId);
-    // starCountRef.on('value', function(snapshot) {
-    //     vm.array = snapshot.val();
-    //   console.log(snapshot);
-    // });
-
     authorsProjectsService.getMessages(user).then(function(resp){
         vm.messagesArray = resp.data.data;
-    });
 
-    setInterval(function(){
-      authorsProjectsService.getMessages(user).then(function(resp){
-        vm.messagesArray = resp.data.data;
-        // for(var key in vm.array){
-        //   if((vm.array[key].fromuser == vm.messagesArray[0].fromuser && vm.array[key].touser == vm.messagesArray[0].touser) || (vm.array[key].fromuser == vm.messagesArray[0].touser && vm.array[key].touser == vm.messagesArray[0].fromuser)){
-        //   vm.messagesArray.push(vm.array[key]);
-        //   }
-        // }
-      });
-    }, 4000);
+
+        var database = firebase.database();
+        var starCountRef = database.ref('chat'+vm.accountUserId);
+        starCountRef.on('value', function(snapshot) {
+          vm.array = snapshot.val();
+           authorsProjectsService.getMessages(user).then(function(resp){
+              vm.messagesArray = resp.data.data;
+           });
+          // var array1 = [];
+          // for(var i = 0; i<vm.messagesArray.length;i++){
+          //   if(vm.messagesArray[i].toUser == vm.userProfile.id && vm.messagesArray[i].type=='message')
+          //     array1.push(vm.messagesArray[i]);
+          // }
+          // var array2 = []
+          // for(var key in vm.array){
+          //   if(vm.array[key].fromUser == vm.toUser && vm.array[key].toUser == vm.userProfile.id && vm.array[key].type=='message'){
+          //       array2.push(vm.array[key]);
+          //   }
+          // }
+          // for(var i = 0; i<array2.length;i++){
+          //   for(var j = 0; j<array1.length;j++){
+          //     if(array2[i].chatId == array1[j].chatId)
+          //       array2.splice(i,1);
+          //   }
+          // }
+          // if(array2[0]){
+          //   console.log(array2[0]);
+          //   vm.messagesArray.push(array2[0]);
+          //   console.log(vm.messagesArray);
+          // }
+        }); 
+    });
   }
 
   function sendMessages(){
@@ -189,17 +255,23 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
 
     authorsProjectsService.sendMessages(messageObj).then(function(resp){
       vm.messagesArray.push({data_sent: resp.data.comment.created_at, message: resp.data.comment.message, toUser: vm.toUser});
+      authorsProjectsService.getMessages(vm.toUser).then(function(resp){
+        vm.messagesArray = resp.data.data;
+      });
     });
   }
 
   function getChats(){
-    // var database = firebase.database();
-    // var starCountRef = database.ref('chat'+vm.accountUserId);
-    // starCountRef.on('value', function(snapshot) {
-    //   console.log(snapshot.val());
-    // });
     authorsProjectsService.getChats().then(function(resp){
       vm.messagedUsers = resp.data.data;
+    });
+  }
+
+  function editArticle(articleObj){
+    articleObj.reviewers = vm.userProfile.id;
+    articleObj.re3DataLink = vm.re3data ;
+    authorsProjectsService.editArticle(articleObj, articleObj.id).then(function(resp){
+
     });
   }
 
@@ -216,6 +288,15 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
        }
      });
    }
-
+// setInterval(function(){
+    //   authorsProjectsService.getMessages(user).then(function(resp){
+    //     vm.messagesArray = resp.data.data;
+    //     // for(var key in vm.array){
+    //     //   if((vm.array[key].fromuser == vm.messagesArray[0].fromuser && vm.array[key].touser == vm.messagesArray[0].touser) || (vm.array[key].fromuser == vm.messagesArray[0].touser && vm.array[key].touser == vm.messagesArray[0].fromuser)){
+    //     //   vm.messagesArray.push(vm.array[key]);
+    //     //   }
+    //     // }
+    //   });
+    // }, 4000);
   initPage();
 }
