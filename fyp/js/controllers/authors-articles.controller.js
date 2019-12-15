@@ -50,14 +50,13 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   function initPage(){
     vm.accountUserId = localStorage.getItem("userId");
     var url = window.location.href;
-    var param = url.substring(22);
-    if(param == "profiles.html"){
+    if(url.indexOf("profiles.html") !=-1){
       vm.getAllAuthors();
     }
-    if(param == "projects.html"){
+    else if(url.indexOf("projects.html") !=-1){
       vm.getAllArticles();
     }
-    if(param == "messages.html"){
+    else if(url.indexOf("messages.html")!=-1){
       vm.getChats();
     }
     authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
