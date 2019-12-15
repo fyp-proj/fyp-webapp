@@ -158,7 +158,7 @@
                     <!--username-dt end-->
                     <div class="user-specs">
                       <h3 ng-bind="ctrl.userProfile.firstName+' '+ ctrl.userProfile.lastName"></h3>
-                      <span>Graphic Designer at Self Employed</span>
+                      <span ng-bind="ctrl.userProfile.institution"></span>
                     </div>
                   </div>
                   <!--user-profile end-->
@@ -177,7 +177,7 @@
                   </div>
                   <div class="post-st">
                     <ul>
-                      <li><a class="post-jb active" ng-click="ctrl.getBrIds(); ctrl.getAuthors()" href="#" title="">Post an Article</a></li>
+                      <li><a class="post-jb active" ng-click="ctrl.getBrIds(); ctrl.getAuthors()" href="#" title="">Post</a></li>
                     </ul>
                   </div>
                   <!--post-st end-->
@@ -232,7 +232,7 @@
                         </li>
                         <!-- ctrl.getComments(article.id) -->
                         <li><a href="#" ng-click="ctrl.getComments(article.id, article)">Show Comments</a></li>
-                        <li ng-if="article.ongoing"><button class="follow" ng-click="ctrl.requestOnGoingArticle(article.title, article.authors[0].id)">request on going article</button></li>
+                        <li ng-if="article.ongoing && article.authors[0].id != ctrl.userProfile.id"><button class="follow" ng-click="ctrl.requestOnGoingArticle(article.title, article.authors[0].id)">request participation</button></li>
                       </ul>
                     </div>
                     <div ng-if="article.comments" style="background-color:silver; margin-bottom:5px;float:left; width:100%" ng-repeat="comment in article.comments">
@@ -240,7 +240,8 @@
                         <div><span style="color:white" ng-bind="comment.author.firstName+ ' ' +comment.author.lastName +': ' "></span><span ng-bind="comment.comment"></span></div>
                     </div>
                     <input ng-if="show" ng-model="ctrl.comment" placeholder="comment" />
-                    <button style="padding:0 5px;" class="follow" ng-if="show" ng-click="ctrl.createComment(article.id)" >add</button>
+                    <button style="padding:0 5px;" class="follow" ng-if="show" ng-click="ctrl.createComment(article)" >add</button>
+                    <div ng-if="article.comments.length==0" style="color:red"> no one commented on this article yet</div>
                   </div>
                 </div>
               </div>
@@ -258,7 +259,7 @@
   <!--post-project-popup end-->
   <div class="post-popup job_post">
     <div class="post-project">
-      <h3>Post an Article</h3>
+      <h3>Post</h3>
       <div class="post-project-fields">
         <form>
           <div class="row">

@@ -62,10 +62,15 @@ function authorsProjectsService($http) {
   }
 
   function searchArticles(page, keyword){
+    var param = '';
+    if(keyword)
+      param = 'page='+page+'&q='+keyword;
+    else
+      param = 'page='+page;
     return $http({
       method: 'GET',
       headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
-      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/articles/search?page='+page+'&q='+keyword
+      url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/articles/search?'+param
     });
   }
 

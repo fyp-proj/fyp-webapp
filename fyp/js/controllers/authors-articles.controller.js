@@ -199,7 +199,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   }
 
   function openGoogleScholar(articleName){
-      self.location = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q="+articleName;
+      window.open("https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q="+articleName);
   }
 
   function showCollaborators(articleId){

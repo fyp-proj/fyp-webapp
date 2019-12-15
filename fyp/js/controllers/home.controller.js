@@ -213,16 +213,18 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		});
 	}
 
-	function createComment(articleId){
-		homeService.createComment(articleId, {comment: vm.comment}).then(function(resp){
-
+	function createComment(article){
+		homeService.createComment(article.id, {comment: vm.comment}).then(function(resp){
+			// var index = vm.newsFeed.data.indexOf(article);
+			// vm.newsFeed.data[index].comments.push(resp.data.comment);
+			//we need from backend the name of the comment creator
 		});
 	}
 
 	function getComments(articleId, article){
 		homeService.getComments(articleId).then(function(resp){
-			var index = vm.newsFeed.indexOf(article);
-			vm.newsFeed[index].comments = resp.data.data;
+			var index = vm.newsFeed.data.indexOf(article);
+			vm.newsFeed.data[index].comments = resp.data.data;
 			// vm.comments = resp.data;
 		});
 	}
