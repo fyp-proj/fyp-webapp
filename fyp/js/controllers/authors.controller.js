@@ -162,6 +162,8 @@ function authorController($http, $window, authorsProjectsService, $location, use
 
     authorsProjectsService.editProfile(profileObj).then(function(resp){
       vm.userProfile = resp.data.user;
+      if(resp.data.success)
+        alert("Your profile is successfuly updated");
     });
   }
 
