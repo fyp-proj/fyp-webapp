@@ -127,7 +127,7 @@
         <div class="user-account">
           <div class="user-info">
             <img src="images/resources/user.png" alt="">
-            <a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
+            <a ng-if="ctrl.userProfile.firstName" href="#">{{ ctrl.userProfile.firstName | capitalizeWord}}</a>
             <i class="la la-sort-down"></i>
           </div>
           <div class="user-account-settingss" id="users">
@@ -222,26 +222,26 @@
                       <p><h3 style="color:red" href="#" title="" ng-bind="article.title"></h3></p>
                     </div>
                     <div ng-if="article.reviewing[0]" style="float:right">  
-                      <p style="color:#FF0000"> This article is in review of '{{article.reviewing[0].firstName}} {{article.reviewing[0].lastName}}'</p>
+                      <p ng-if="article.reviewing[0]" style="color:#FF0000"> This article is in review of '{{article.reviewing[0].firstName}} {{article.reviewing[0].lastName}}'</p>
                     </div>
                     <div class="job-status-bar" ng-init="show = false">
                       <ul class="like-com">
                         <li>
                           <!-- ctrl.createComment(article.id) -->
-                          <a href="#" ng-click="show = true;"> Review</a>
+                          <a href="#" ng-click="show = true;"> Comment</a>
                         </li>
                         <!-- ctrl.getComments(article.id) -->
                         <li><a href="#" ng-click="ctrl.getComments(article.id, article)">Show Comments</a></li>
                         <li ng-if="article.ongoing && article.authors[0].id != ctrl.userProfile.id"><button class="follow" ng-click="ctrl.requestOnGoingArticle(article.title, article.authors[0].id)">request participation</button></li>
                       </ul>
                     </div>
-                    <div ng-if="article.comments" style="background-color:silver; margin-bottom:5px;float:left; width:100%" ng-repeat="comment in article.comments">
+                    <div ng-if="article.comments" style="background-color:#F2F2F2; margin-bottom:5px;float:left; width:100%" ng-repeat="comment in article.comments">
                       <!-- style="border: 1px solid black;padding: 5px 10px;" -->
-                        <div><span style="color:white" ng-bind="comment.author.firstName+ ' ' +comment.author.lastName +': ' "></span><span ng-bind="comment.comment"></span></div>
+                        <div><span style="color:silver" ng-bind="comment.author.firstName+ ' ' +comment.author.lastName +': ' "></span><span ng-bind="comment.comment"></span></div>
                     </div>
-                    <input ng-if="show" ng-model="ctrl.comment" placeholder="comment" />
+                    <input ng-if="show" ng-model="ctrl.comment" placeholder="Write a comment..." />
                     <button style="padding:0 5px;" class="follow" ng-if="show" ng-click="ctrl.createComment(article)" >add</button>
-                    <div ng-if="article.comments.length==0" style="color:red"> no one commented on this article yet</div>
+                    <div ng-if="article.comments.length==0" style="color:red"> No one commented on this article yet</div>
                   </div>
                 </div>
               </div>
@@ -264,22 +264,20 @@
         <form>
           <div class="row">
             <div class="col-lg-12">
-              <input type="text" name="title" placeholder="Title" ng-model="ctrl.title">
+              <input id="postTitle" type="text" name="" placeholder="Title" ng-model="ctrl.title">
             </div>
             <div class="col-lg-12">
               <input type="text" name="skills" placeholder="citation" ng-model="ctrl.citation">
             </div>
             <div class="col-lg-6">
-              <div class="price-br">
-                <input type="text" name="price1" placeholder="Keywords" ng-model="ctrl.keywords">
-              </div>
+              <input id="postkeywords" type="text" name="" placeholder="Keywords" ng-model="ctrl.keywords">
             </div>
             <div class="col-lg-6">
-              <input type="text" name="date" placeholder="Year" ng-model="ctrl.year">
+              <input id="postYear" type="text" name="date" placeholder="Year" ng-model="ctrl.year">
             </div>
             <div class="col-lg-12">
               <div class="inp-field">
-                <select ng-model="ctrl.brId" ng-change="ctrl.getReviewers(ctrl.brId)">
+                <select id="postBrId" ng-model="ctrl.brId" ng-change="ctrl.getReviewers(ctrl.brId)">
                   <option selected="selected" ng-value="''" disabled> select a br</option>
                   <option ng-repeat="br in ctrl.brIds.data" ng-bind="br.name" ng-value="br.id"></option>
                 </select>

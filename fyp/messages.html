@@ -2,7 +2,7 @@
 <html ng-app="App">
 <head>
 	<meta charset="UTF-8">
-	<title>WorkWise Html Template</title>
+	<title>EduBioMed</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
@@ -30,12 +30,7 @@
 					<div class="logo">
 						<a href="homePage.html" title=""><img src="images/mainLogo.png" style="width: 50px;"alt=""></a>
 					</div><!--logo end-->
-					<div class="search-bar">
-						<form>
-							<input type="text" name="search" placeholder="Search...">
-							<button type="submit"><i class="la la-search"></i></button>
-						</form>
-					</div><!--search-bar end-->
+					
 					<nav>
 						<ul>
 							<li>
@@ -122,7 +117,7 @@
 					<div class="user-account">
 						<div class="user-info">
 							<img src="images/resources/user.png" alt="">
-							<a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
+							<a ng-if="ctrl.userProfile.firstName" href="#">{{ ctrl.userProfile.firstName | capitalizeWord}}</a>
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
@@ -290,28 +285,6 @@
 				</div><!--messages-sec end-->
 			</div>
 		</section><!--messages-page end-->
-
-
-
-		<footer>
-			<div class="footy-sec mn no-margin">
-				<div class="container">
-					<ul>
-						<li><a href="help-center.html" title="">Help Center</a></li>
-						<li><a href="about.html" title="">About</a></li>
-						<li><a href="#" title="">Privacy Policy</a></li>
-						<li><a href="#" title="">Community Guidelines</a></li>
-						<li><a href="#" title="">Cookies Policy</a></li>
-						<li><a href="#" title="">Career</a></li>
-						<li><a href="forum.html" title="">Forum</a></li>
-						<li><a href="#" title="">Language</a></li>
-						<li><a href="#" title="">Copyright Policy</a></li>
-					</ul>
-					<p><img src="images/copy-icon2.png" alt="">Copyright 2019</p>
-					<img class="fl-rgt" src="images/logo2.png" alt="">
-				</div>
-			</div>
-		</footer>
 
 	</div><!--theme-layout end-->
 

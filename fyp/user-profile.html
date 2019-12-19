@@ -3,7 +3,7 @@
 <html ng-app="App">
 <head>
 	<meta charset="UTF-8">
-	<title>WorkWise Html Template</title>
+	<title>EduBioMed</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
@@ -122,7 +122,7 @@
 					<div class="user-account">
 						<div class="user-info">
 							<img src="images/resources/user.png" alt="">
-							<a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
+							<a ng-if="ctrl.userProfile.firstName" href="#">{{ ctrl.userProfile.firstName | capitalizeWord}}</a>
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
@@ -203,7 +203,7 @@
 						                              <p ng-bind="art.br.country"></p>
 												    </span>
 												    <div ng-if="art.reviewing[0]" style="float:right">  
-												    	<p style="color:#FF0000"> This article is in review of '{{art.reviewing[0].firstName}} {{art.reviewing[0].lastName}}'</p>
+												    	<p ng-if="art.reviewing[0]" style="color:#FF0000"> This article is in review of '{{art.reviewing[0].firstName}} {{art.reviewing[0].lastName}}'</p>
 												    </div>
                         						</div>
 												<div class="job-status-bar" ng-init="ctrl.showForm = false">
@@ -213,7 +213,7 @@
 													<form ng-if="ctrl.showForm" style="margin-left:160px;margin-top: 18px;">
 												        <input type="text" ng-keyup="ctrl.searchAuthors()" ng-model="ctrl.search" name="search" placeholder="Filter authors">
 												        <div style="display:inline-block;" class="loader" ng-if="ctrl.loadAuthors"></div>
-												        <select ng-model="ctrl.toUser" ng-if="ctrl.allAuthors.data">
+												        <select ng-model="ctrl.toUser" ng-if="ctrl.allAuthors.data" style="width: 200px !important;">
 												        	<option selected="selected" ng-value="''" disabled> select an author</option>
 												        	<option ng-repeat="auth in ctrl.allAuthors.data" ng-bind="auth.firstName + ' '+ auth.lastName" ng-value="auth.id"></option>
 												        </select>
@@ -227,13 +227,15 @@
 									<div class="product-feed-tab" id="info-dd">
 										<div class="user-profile-ov">
 											<div>First Name: <input value="" ng-model="ctrl.userProfile.firstName" placeholder="first name" /></div>
-											<div>Last Name:  <input value="" ng-model="ctrl.userProfile.lastName" placeholder="last name" /></div>
-											<div>Institution:  <input value="" ng-model="ctrl.userProfile.institution" placeholder="institution" /></div>
-											<div style="font-weight:">Social Media:</div>
-											<div><div><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 5px;" alt=""> LinkedIn: <input value="" ng-model="ctrl.userProfile.socialMedia.linkedin" placeholder="" /></div>
-											 <div style="clear: both;"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt="">Academia: <input value="" ng-model="ctrl.userProfile.socialMedia.academia" placeholder="" /></div>
-											 <div style="clear: both;"><img style="margin:0 5px 0 3px;width:30px;" src="images/fblogo.png" alt="">Facebook: <input value="" ng-model="ctrl.userProfile.socialMedia.facebook" placeholder="" /></div>
-											 <div style="clear: both;"><img src="images/instalogo.png" style="width:35px;margin-right:5px" alt="">Instagram: <input value="" ng-model="ctrl.userProfile.socialMedia.instagram" placeholder="" /></div></div>
+											<div>Last Name:  <input value="" style="margin-left:1px" ng-model="ctrl.userProfile.lastName" placeholder="last name" /></div>
+											<div>Institution:  <input value="" style="margin-left:6px" ng-model="ctrl.userProfile.institution" placeholder="institution" /></div>
+											<div style="margin: 15px 0 10px 0; font-weight:bold">Social Media:</div>
+											<div>
+												<div style="margin-bottom:10px"><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 5px;" alt=""> <div>LinkedIn: <input style="margin-left:41px;"value="" ng-model="ctrl.userProfile.socialMedia.linkedin" placeholder="" /></div></div>
+											    <div style="clear: both;margin-bottom:10px;"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt=""><div>Academia: <input value="" ng-model="ctrl.userProfile.socialMedia.academia" placeholder="" /></div></div>
+											    <div style="clear: both;margin-bottom:10px"><img style="margin:0 5px 0 3px;width:30px;" src="images/fblogo.png" alt=""><div>Facebook: <input style="margin-left:28px" value="" ng-model="ctrl.userProfile.socialMedia.facebook" placeholder="" /></div></div>
+											    <div style="clear: both;margin-bottom:10px"><img src="images/instalogo.png" style="width:35px;margin-right:5px; " alt=""><div>Instagram: <input style="margin-left:24px" value="" ng-model="ctrl.userProfile.socialMedia.instagram" placeholder="" /></div></div>
+											</div>
 											 <button style="margin: 10px;float: right;padding: 10px;" class="hire" ng-click="ctrl.editProfile()">Update Profile</button>
 										</div><!--user-profile-ov end-->
 									</div><!--product-feed-tab end-->

@@ -1,4 +1,8 @@
-angular.module('main').controller('authorController',authorController);
+angular.module('main').controller('authorController',authorController).filter('capitalizeWord', function() {
+    return function(text) {
+      return (!!text) ? text.charAt(0).toUpperCase() + text.substr(1).toLowerCase() : '';
+    }
+});
 
 authorController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'userService', 'homeService'];
 
@@ -95,12 +99,24 @@ function authorController($http, $window, authorsProjectsService, $location, use
   }
 
   function logout(){
+    var url = window.location.href;
+    console.log(url.indexOf("my-profile-feed.html"));
+    console.log(url.substring(0, url.indexOf("user-profile.html")));
+
      var key = localStorage.getItem("apiToken");
      userService.logOut(key).then(function(resp){
        if(resp.data.status == 'success'){
          localStorage.removeItem("apiToken");
          alert(resp.data.message);
-         $window.location.href= "/sign-in.html";
+         // $window.location.href= "/sign-in.html";
+         // var url = window.location.href;
+         if(url.indexOf("my-profile-feed.html")!=-1)
+           var redirection = url.substring(0, url.indexOf("my-profile-feed.html"));
+         else if(url.indexOf("user-profile.html")!=-1)
+            var redirection = url.substring(0, url.indexOf("user-profile.html"));
+          
+         window.open(redirection,'_blank');
+         window.setTimeout(function(){this.close();},200)
        }
        else{
          alert(resp.data.message);

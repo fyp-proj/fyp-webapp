@@ -3,7 +3,7 @@
 <html ng-app="App">
 <head>
 	<meta charset="UTF-8">
-	<title>WorkWise Html Template</title>
+	<title>EduBioMed</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
@@ -121,7 +121,7 @@
 					<div class="user-account">
 						<div class="user-info">
 							<img src="images/resources/user.png" alt="">
-							<a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
+							<a ng-if="ctrl.userProfile.firstName" href="#">{{ ctrl.userProfile.firstName | capitalizeWord}}</a>
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">
@@ -154,7 +154,7 @@
 							<div class="col-lg-3" ng-if="ctrl.showAdvancedSearch">
 								<div class="filter-secs">
 									<div class="filter-heading">
-										<h3>Search</h3>
+										<h3>Advanced Search</h3>
 									</div><!--filter-heading end-->
 									<form action="ctrl.submit()">
 					                    <div class="paddy">
@@ -162,7 +162,9 @@
 					                        <input style="margin-bottom:10px;" ng-model="ctrl.title" type="text" name="articleName" placeholder="Article's Name">
 					                        <input style="margin-bottom:10px;" ng-model="ctrl.keywords" type="text" name="keywords" placeholder="keywords ex:Nature...">
 					                        <input style="margin-bottom:10px;" placeholder="from Date yyyy" ng-model="ctrl.fromDate"/>
-					                        <input placeholder="to Date yyyy" ng-model="ctrl.toDate"/>
+					                        <input style="margin-bottom:10px;" placeholder="to Date yyyy" ng-model="ctrl.toDate"/>
+					                        <input style="margin-bottom:10px;" placeholder="BR Name" ng-model="ctrl.brName"/>
+					                        <input placeholder="BR Country" ng-model="ctrl.brCountry"/>
 					                      </div>
 
 					                    </div>

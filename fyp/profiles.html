@@ -3,7 +3,7 @@
 <html ng-app="App">
 <head>
 <meta charset="UTF-8">
-<title>WorkWise Html Template</title>
+<title>EduBioMed</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -37,12 +37,7 @@
 					<div class="logo">
 						<a href="homePage.html" title=""><img src="images/mainLogo.png" style="width: 50px;"alt=""></a>
 					</div><!--logo end-->
-					<div class="search-bar">
-						<form>
-							<input type="text" name="search" ng-model="ctrl.wordToSearch" ng-keypress="ctrl.searchAuthors()" placeholder="Search...">
-							<button ng-click="ctrl.searchAuthors()" type="submit"><i class="la la-search"></i></button>
-						</form>
-					</div><!--search-bar end-->
+					
 					<nav>
 						<ul>
 							<li>
@@ -130,7 +125,7 @@
 					<div class="user-account">
 						<div class="user-info">
 							<img src="images/resources/user.png" alt="">
-							<a href="#" title="" ng-bind="ctrl.userProfile.firstName"></a>
+							<a ng-if="ctrl.userProfile.firstName" href="#">{{ ctrl.userProfile.firstName | capitalizeWord}}</a>
 							<i class="la la-sort-down"></i>
 						</div>
 						<div class="user-account-settingss">

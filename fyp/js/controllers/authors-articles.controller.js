@@ -1,4 +1,9 @@
-angular.module('main').controller('authorsArticlesController',authorsArticlesController);
+angular.module('main').controller('authorsArticlesController',authorsArticlesController).filter('capitalizeWord', function() {
+    return function(text) {
+      return (!!text) ? text.charAt(0).toUpperCase() + text.substr(1).toLowerCase() : '';
+    }
+});
+
 
 authorsArticlesController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'userService', 'homeService', '$anchorScroll'];
 
@@ -26,6 +31,8 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   vm.messagedUsers = [];
   vm.messagesArray = [];
   vm.reviewRequests = [];
+  vm.brName = '';
+  vm.brCountry ='';
 
   vm.getAllAuthors = getAllAuthors;
   vm.getAllArticles = getAllArticles;
@@ -151,7 +158,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
 
   function advancedSearchArticles(){
     vm.loadArticles = true;
-    var articleObj = {title: vm.title, keywords:vm.keywords, fromDate:vm.fromDate, toDate:vm.toDate};
+    var articleObj = {title: vm.title, keywords:vm.keywords, fromDate:vm.fromDate, toDate:vm.toDate, brName:vm.brName, brCountry:vm.brCountry};
     authorsProjectsService.advancedSearchArticles(articleObj).then(function(resp){
       vm.allArticles = resp.data;
       vm.loadArticles = false;
@@ -285,7 +292,17 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
        if(resp.data.status == 'success'){
          localStorage.removeItem("apiToken");
          alert(resp.data.message);
-         $window.location.href= "/sign-in.html";
+         // $window.location.href= "/sign-in.html";
+         var url = window.location.href;
+         if(url.indexOf("projects.html")!=-1)
+           var redirection = url.substring(0, url.indexOf("projects.html"));
+         else if(url.indexOf("profiles.html")!=-1)
+            var redirection = url.substring(0, url.indexOf("profiles.html"));
+         else if(url.indexOf("messages.html")!=-1)
+            var redirection = url.substring(0, url.indexOf("messages.html"));
+
+         window.open(redirection,'_blank');
+         window.setTimeout(function(){this.close();},500)
        }
        else{
          alert(resp.data.message);

@@ -1,4 +1,9 @@
-angular.module('main').controller('homeController',homeController);
+angular.module('main').controller('homeController',homeController).filter('capitalizeWord', function() {
+    return function(text) {
+      return (!!text) ? text.charAt(0).toUpperCase() + text.substr(1).toLowerCase() : '';
+    }
+});
+
 
 homeController.$inject = ['$http', '$window', 'authorsProjectsService', '$location', 'homeService', 'userService'];
 
@@ -50,6 +55,8 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.logout = logout;
 
 	function initPage(){
+		if(!localStorage.getItem("apiToken"))
+			$window.location.href = "/sign-in.html";
 		vm.accountUserId = localStorage.getItem("userId");
 		authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
         	vm.userProfile = resp.data.data;
@@ -174,6 +181,18 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	}
 
 	function createPost(){
+		if(vm.title =='' || vm.keywords=='' || vm.brId == '' || vm.year == ''){
+			if(vm.title=='')
+				document.getElementById("postTitle").style.border = "1px solid red";
+			if(vm.keywords=='')
+				document.getElementById("postkeywords").style.border = "1px solid red";
+			if(vm.brId==null)
+				document.getElementById("postBrId").style.border = "1px solid red";
+			if(vm.year==null)
+				document.getElementById("postYear").style.border = "1px solid red";
+			alert("Please \'title\', \'keywords\', \'br\', \'year\'  are required fields! ");
+			return '';
+		}
 		var collIds= [];
 		for(var i =0; i<vm.addCollabs.length; i++){
 			collIds[i]=vm.addCollabs[i].id;
@@ -218,6 +237,8 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 			// var index = vm.newsFeed.data.indexOf(article);
 			// vm.newsFeed.data[index].comments.push(resp.data.comment);
 			//we need from backend the name of the comment creator
+			vm.comment = '';
+			vm.getComments(article.id, article);
 		});
 	}
 
@@ -270,7 +291,11 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
        if(resp.data.status == 'success'){
          localStorage.removeItem("apiToken");
          alert(resp.data.message);
-         $window.location.href= "/sign-in.html";
+         // $window.location.href= "/sign-in.html";
+         var url = window.location.href;
+         var redirection = url.substring(0, url.indexOf("homePage.html"))
+         window.open(redirection,'_blank');
+         window.setTimeout(function(){this.close();},200)
        }
        else{
          alert(resp.data.message);

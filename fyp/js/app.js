@@ -92,6 +92,20 @@ angular.module("main").controller("mainController",mainController );
    }
 
    function signUp(){
+     if(vm.firstName =='' || vm.lastName=='' || vm.email == '' || vm.password == '' || vm.passwordConfirmation ==''){
+      if(vm.firstName=='')
+        document.getElementById("signFirstName").style.border = "1px solid red";
+      if(vm.lastName=='')
+        document.getElementById("signLastName").style.border = "1px solid red";
+      if(vm.email=='')
+        document.getElementById("signEmail").style.border = "1px solid red";
+      if(vm.password=='')
+        document.getElementById("signPassword").style.border = "1px solid red";
+      if(vm.passwordConfirmation=='')
+        document.getElementById("signConfirmationPassword").style.border = "1px solid red";
+      alert("Please \'First Name\', \'Last Name\', \'Email\', \'Password\', \'Confirmation Password\' are required fields! ");
+      return '';
+    }
      userService.signUp(vm.firstName, vm.lastName, vm.email, vm.password, vm.passwordConfirmation, vm.role).then(function(resp){
        if(resp.data.status == 'success'){
          localStorage.apiToken =  resp.data.api_token;
