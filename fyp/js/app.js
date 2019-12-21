@@ -20,6 +20,7 @@ angular.module("main").controller("mainController",mainController );
      username:'',
      email:''
    };
+   vm.showPassInfo = false;
 
    //functions
    vm.login = login;
@@ -114,7 +115,17 @@ angular.module("main").controller("mainController",mainController );
          alert(resp.data.message);
        }
        else{
-         alert(resp.data.error);
+         var error = '';
+         for(var key in resp.data.data){
+           error += ' \n'+ resp.data.data[key]; 
+         }
+         var errorArr = error.split(',');
+         var finalErr = ''+errorArr[0];
+         for(var i =1; i<errorArr.length;i++){
+            finalErr+='\n'+errorArr[i];
+         }
+         alert(finalErr);
+         vm.showPassInfo = true;
        }
      });
    }

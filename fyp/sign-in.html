@@ -137,6 +137,7 @@
 														<input ng-model="ctrl.role" style="width:3% !important;float: left;margin-right: 10px;margin-top: -10px;" type="radio" name="role" value="3"> Researcher<br>
 													</div>
 												</div>
+												<div style="color:#FF0000" ng-if="ctrl.showPassInfo">Pass format: at least 8 characters, at least 1 upper case letter, at least 1 numerical value</div>
 												<div class="col-lg-12 no-pdd">
 													<button type="button" ng-click="ctrl.signUp()" value="submit">Get Started</button>
 												</div>
