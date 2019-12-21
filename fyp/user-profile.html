@@ -30,12 +30,6 @@
 					<div class="logo">
 						<a href="homePage.html" title=""><img src="images/mainLogo.png" style="width: 50px;"alt=""></a>
 					</div><!--logo end-->
-					<div class="search-bar">
-						<form>
-							<input type="text" name="search" placeholder="Search...">
-							<button type="submit"><i class="la la-search"></i></button>
-						</form>
-					</div><!--search-bar end-->
 					<nav>
 						<ul>
 							<li>
@@ -93,13 +87,17 @@
 				                  <div class="notfication-details">
 				                    <div class="notification-info" ng-repeat="request in ctrl.reviewRequests">
 				                      <h3>
-				                      	<a ng-if="request.status == 3 && request.fromUserId != ctrl.userProfile.id" href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> 
-                        				<a ng-if="request.status!= 3 && request.fromUserId == ctrl.userProfile.id" href="#" title="" ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name"></a>
-				                      	 <p ng-bind="request.message"></p></h3>
+				                        <a ng-if="request.type=='notification' && request.status == 3 && request.fromUserId != ctrl.userProfile.id" href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> 
+				                        <a ng-if="request.type=='notification' && request.status!= 3 && request.fromUserId == ctrl.userProfile.id" href="#" title="" ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name"></a>
+				                        <a ng-if="request.type == 'ongoing' && request.toUserId ==ctrl.userProfile.id" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a>
+				                        <a ng-if="request.type == 'message' && request.toUserId ==ctrl.userProfile.id"
+				                        ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name+ ' messaged you'"></a>
+				                         <p ng-bind="request.message"></p>
+				                      </h3>
 				                      <div style="clear:both">
-				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id)">Accept</button>
-				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
-				                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
+				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
+				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
+				                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject' || request.message=='Accepted participation' || request.message=='Rejected participation' || request.type=='message'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
 				                      </div>
 				                      <span style="display: contents;" ng-bind="request.created_at"></span>
 				                      
@@ -167,13 +165,13 @@
 											<div><span style="font-weight:bold">Email:</span><span ng-bind="ctrl.userProfile.email"></span></div>
 											<div> <span style="font-weight:bold">Institution:</span><span ng-bind="ctrl.userProfile.institution"></span></div>
 										</div><!--star-descp end-->
-										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.linkedin"><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 30px;" alt=""><a href="ctrl.userProfile.socialMedia.linkedin" ng-bind="ctrl.userProfile.socialMedia.linkedin"></a></div>
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.linkedin"><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 30px;" alt=""><a href="{{ctrl.userProfile.socialMedia.linkedin}}" ng-bind="ctrl.userProfile.socialMedia.linkedin"></a></div>
 
-										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.academia"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt=""><a href="ctrl.userProfile.socialMedia.academia" ng-bind="ctrl.userProfile.socialMedia.academia"></a></div>
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.academia"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt=""><a href="{{ctrl.userProfile.socialMedia.academia}}" ng-bind="ctrl.userProfile.socialMedia.academia"></a></div>
 
-										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.facebook"><img style="margin:0 30px 0 3px;width:30px;" src="images/fblogo.png" alt=""><a href="ctrl.userProfile.socialMedia.facebook" ng-bind="ctrl.userProfile.socialMedia.facebook"></a></div>
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.facebook"><img style="margin:0 30px 0 3px;width:30px;" src="images/fblogo.png" alt=""><a href="{{ctrl.userProfile.socialMedia.facebook}}" ng-bind="ctrl.userProfile.socialMedia.facebook"></a></div>
 
-										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.instagram"><img src="images/instalogo.png" style="width:35px;margin-right:30px" alt=""><a href="ctrl.userProfile.socialMedia.instagram" ng-bind="ctrl.userProfile.socialMedia.instagram"></a></div>
+										<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.instagram"><img src="images/instalogo.png" style="width:35px;margin-right:30px" alt=""><a href="{{ctrl.userProfile.socialMedia.instagram}}" ng-bind="ctrl.userProfile.socialMedia.instagram"></a></div>
 										<div class="tab-feed">
 											<ul>
 												<li data-tab="feed-dd" class="active">

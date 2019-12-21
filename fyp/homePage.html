@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Angular Example</title>
+  <title>EduBioMed</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="" />
   <meta name="keywords" content="" />
@@ -95,14 +95,17 @@
                   <div class="notfication-details">
                     <div class="notification-info" ng-repeat="request in ctrl.reviewRequests">
                       <h3>
-                        <a ng-if="request.status == 3 && request.fromUserId != ctrl.userProfile.id" href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> 
-                        <a ng-if="request.status!= 3 && request.fromUserId == ctrl.userProfile.id" href="#" title="" ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name"></a>
+                        <a ng-if="request.type=='notification' && request.status == 3 && request.fromUserId != ctrl.userProfile.id" href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> 
+                        <a ng-if="request.type=='notification' && request.status!= 3 && request.fromUserId == ctrl.userProfile.id" href="#" title="" ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name"></a>
+                        <a ng-if="request.type == 'ongoing' && request.toUserId ==ctrl.userProfile.id" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a>
+                        <a ng-if="request.type == 'message' && request.toUserId ==ctrl.userProfile.id"
+                        ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name+ ' messaged you'"></a>
                          <p ng-bind="request.message"></p>
                       </h3>
                       <div style="clear:both">
-                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(true, request.id, request.articleId)">Accept</button>
-                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject'" ng-click="ctrl.updateRequest(false, request.id)">Reject</button>
-                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
+                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
+                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
+                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject' || request.message=='Accepted participation' || request.message=='Rejected participation' || request.type=='message'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
                       </div>
                       <span style="display: contents;" ng-bind="request.created_at"></span>
                       
@@ -232,7 +235,7 @@
                         </li>
                         <!-- ctrl.getComments(article.id) -->
                         <li><a href="#" ng-click="ctrl.getComments(article.id, article)">Show Comments</a></li>
-                        <li ng-if="article.ongoing && article.authors[0].id != ctrl.userProfile.id"><button class="follow" ng-click="ctrl.requestOnGoingArticle(article.title, article.authors[0].id)">request participation</button></li>
+                        <li ng-if="article.ongoing && article.authors[0].id != ctrl.userProfile.id"><button class="follow" ng-click="ctrl.requestOnGoingArticle(article.title, article.authors[0].id, article.id)">request participation</button></li>
                       </ul>
                     </div>
                     <div ng-if="article.comments" style="background-color:#F2F2F2; margin-bottom:5px;float:left; width:100%" ng-repeat="comment in article.comments">
@@ -304,7 +307,7 @@
               <input style="float: left;width: 10px !important;margin-right: 10px;margin-top: -8px;" type="checkbox" ng-model="ctrl.onGoing" checked>
               <div>On going article</div>
             </div>
-            <div class="col-lg-6" ng-if="!ctrl.onGoing">
+            <div class="col-lg-6" >
                <select ng-model="ctrl.addColl" ng-if="ctrl.allAuthors.data" ng-change="ctrl.addCollaborators()">
                     <option selected="selected" ng-value="''" disabled> select an author</option>
                     <option ng-repeat="auth in ctrl.allAuthors.data" ng-bind="auth.firstName + ' '+ auth.lastName" ng-value="auth.id"></option>
@@ -314,7 +317,7 @@
                   </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-6" ng-if="!ctrl.onGoing">
                <select ng-model="ctrl.addRev" ng-if="ctrl.reviewers" ng-change="ctrl.addReviewers()">
                     <option selected="selected" ng-value="''" disabled> select a reviewer</option>
                     <option ng-repeat="rev in ctrl.reviewers" ng-bind="rev.firstName + ' '+ rev.lastName" ng-value="rev.id"></option>

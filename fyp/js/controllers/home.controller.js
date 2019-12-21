@@ -127,17 +127,30 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		});
 	}
 
-	function updateRequest(confirmation, chatId, articleId){
-		if(confirmation){
+	function updateRequest(confirmation, chatId, articleId, requestType){
+		if(confirmation && requestType =='notification'){
 			var status = 2;
 			var message ="accept"
 			var articleId = articleId;
 			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId};
 		}
-		else {
+		else if(requestType == 'notification'){
 			var status = 1;
 			var message = "reject";
-			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification'};
+			var articleId = articleId;
+			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId};
+		}
+		else if(confirmation && requestType == 'ongoing'){
+			var status = 2;
+			var message ="accept"
+			var articleId = articleId;
+			var requestObj = {chatId: chatId, message: 'Accepted participation', status: status, type: 'ongoing', articleId:articleId};
+		}
+		else if(requestType  == 'ongoing'){
+			var status = 1;
+			var message = "reject";
+			var articleId = articleId;
+			var requestObj = {chatId: chatId, message: 'Rejected participation', status: status, type: 'ongoing', articleId:articleId};
 		}
 		
 		homeService.updateRequest(requestObj).then(function(resp){
@@ -156,8 +169,8 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		});
 	}
 
-	function requestOnGoingArticle(articleName, userId){
-		var requetObj = {toUser: userId, message:'request to join your ongoing article '+articleName, status:3, type:"ongoing"};
+	function requestOnGoingArticle(articleName, userId, articleIdf){
+		var requetObj = {toUser: userId, message:'request to participate your article \''+articleName+'\'', status:3, type:"ongoing", articleId:articleId};
 		authorsProjectsService.sendMessages(requetObj).then(function(resp){
 			if(resp.data.status == 'success')
 				alert('Request on going article is sent');
@@ -295,7 +308,7 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
          var url = window.location.href;
          var redirection = url.substring(0, url.indexOf("homePage.html"))
          window.open(redirection,'_blank');
-         window.setTimeout(function(){this.close();},200)
+         window.setTimeout(function(){this.close();},300)
        }
        else{
          alert(resp.data.message);

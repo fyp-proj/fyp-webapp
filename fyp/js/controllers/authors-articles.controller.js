@@ -302,7 +302,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
             var redirection = url.substring(0, url.indexOf("messages.html"));
 
          window.open(redirection,'_blank');
-         window.setTimeout(function(){this.close();},500)
+         window.setTimeout(function(){this.close();},300)
        }
        else{
          alert(resp.data.message);

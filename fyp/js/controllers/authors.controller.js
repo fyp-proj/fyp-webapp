@@ -116,7 +116,7 @@ function authorController($http, $window, authorsProjectsService, $location, use
             var redirection = url.substring(0, url.indexOf("user-profile.html"));
           
          window.open(redirection,'_blank');
-         window.setTimeout(function(){this.close();},200)
+         window.setTimeout(function(){this.close();},300)
        }
        else{
          alert(resp.data.message);
