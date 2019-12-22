@@ -98,13 +98,14 @@
                         <a ng-if="request.type=='notification' && request.status == 3 && request.fromUserId != ctrl.userProfile.id" href="#" title="" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a> 
                         <a ng-if="request.type=='notification' && request.status!= 3 && request.fromUserId == ctrl.userProfile.id" href="#" title="" ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name"></a>
                         <a ng-if="request.type == 'ongoing' && request.toUserId ==ctrl.userProfile.id" ng-bind="request.from_user_first_name + ' '+ request.from_user_last_name"></a>
+                        <a ng-if="request.type == 'ongoing' && request.fromUserId ==ctrl.userProfile.id && (request.message=='Accepted participation' || request.message=='Rejected participation')" ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name"></a>
                         <a ng-if="request.type == 'message' && request.toUserId ==ctrl.userProfile.id"
                         ng-bind="request.to_user_first_name + ' '+ request.to_user_last_name+ ' messaged you'"></a>
                          <p ng-bind="request.message"></p>
                       </h3>
                       <div style="clear:both">
-                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
-                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
+                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(true, request.chatId, request.articleId, request.type, request.id)">Accept</button>
+                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(false, request.chatId, request.articleId, request.type, request.id)">Reject</button>
                         <button class="follow" ng-if="request.message=='accept' || request.message=='reject' || request.message=='Accepted participation' || request.message=='Rejected participation' || request.type=='message'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
                       </div>
                       <span style="display: contents;" ng-bind="request.created_at"></span>

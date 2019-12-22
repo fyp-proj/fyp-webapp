@@ -60,7 +60,7 @@ function homeService($http) {
   function updateRequest (requestObj){
   	return $http({
       method: 'POST',
-      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken")},
+      headers: {Authorization: "Bearer " + localStorage.getItem("apiToken"), 'Content-Type': 'application/json',  'Access-Controle-Allow-Origin':'*'},
       data: requestObj,
       url: 'http://ec2-3-135-222-170.us-east-2.compute.amazonaws.com/api/v1/chats/update',
     });

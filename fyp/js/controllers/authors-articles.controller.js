@@ -95,16 +95,32 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
     });
   }
 
-  function updateRequest(confirmation, chatId){
-    if(confirmation){
+  function updateRequest(confirmation, chatId, articleId, requestType, id){
+    if(confirmation && requestType =='notification'){
       var status = 2;
       var message ="accept"
+      var articleId = articleId;
+      var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId, id:id};
     }
-    else {
+    else if(requestType == 'notification'){
       var status = 1;
       var message = "reject";
+      var articleId = articleId;
+      var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId, id:id};
     }
-    var requestObj = {chatId: chatId, message: message, status: status, type: 'notification'};
+    else if(confirmation && requestType == 'ongoing'){
+      var status = 2;
+      var message ="accept"
+      var articleId = articleId;
+      var requestObj = {chatId: chatId, message: 'Accepted participation', status: status, type: 'ongoing', articleId:articleId, id:id};
+    }
+    else if(requestType  == 'ongoing'){
+      var status = 1;
+      var message = "reject";
+      var articleId = articleId;
+      var requestObj = {chatId: chatId, message: 'Rejected participation', status: status, type: 'ongoing', articleId:articleId, id:id};
+    }
+    
     homeService.updateRequest(requestObj).then(function(resp){
       // vm.reviewRequests.splice(vm.reviewRequests.indexOf(index));
       if(resp.data.success){
@@ -120,6 +136,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
       }
     });
   }
+
 
   function getAllAuthors (){
     vm.loadAuthors = true;

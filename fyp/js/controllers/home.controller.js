@@ -128,30 +128,30 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		});
 	}
 
-	function updateRequest(confirmation, chatId, articleId, requestType){
+	function updateRequest(confirmation, chatId, articleId, requestType, id){
 		if(confirmation && requestType =='notification'){
 			var status = 2;
 			var message ="accept"
 			var articleId = articleId;
-			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId};
+			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId, id:id};
 		}
 		else if(requestType == 'notification'){
 			var status = 1;
 			var message = "reject";
 			var articleId = articleId;
-			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId};
+			var requestObj = {chatId: chatId, message: message, status: status, type: 'notification', articleId:articleId, id:id};
 		}
 		else if(confirmation && requestType == 'ongoing'){
 			var status = 2;
 			var message ="accept"
 			var articleId = articleId;
-			var requestObj = {chatId: chatId, message: 'Accepted participation', status: status, type: 'ongoing', articleId:articleId};
+			var requestObj = {chatId: chatId, message: 'Accepted participation', status: status, type: 'ongoing', articleId:articleId, id:id};
 		}
 		else if(requestType  == 'ongoing'){
 			var status = 1;
 			var message = "reject";
 			var articleId = articleId;
-			var requestObj = {chatId: chatId, message: 'Rejected participation', status: status, type: 'ongoing', articleId:articleId};
+			var requestObj = {chatId: chatId, message: 'Rejected participation', status: status, type: 'ongoing', articleId:articleId, id:id};
 		}
 		
 		homeService.updateRequest(requestObj).then(function(resp){
