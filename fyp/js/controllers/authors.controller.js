@@ -27,11 +27,12 @@ function authorController($http, $window, authorsProjectsService, $location, use
   vm.editArticle = editArticle;
   vm.deleteNotif = deleteNotif;
   vm.updateRequest = updateRequest;
+  vm.getAuthorDetails = getAuthorDetails;
 
 
   function initPage(){
     vm.accountUserId = localStorage.getItem("userId");
-    getAuthorDetails();
+    vm.getAuthorDetails();
     var database = firebase.database();
     var starCountRef = database.ref('chat'+vm.accountUserId);
     starCountRef.on('value', function(snapshot) {
@@ -86,10 +87,13 @@ function authorController($http, $window, authorsProjectsService, $location, use
     var url = window.location.href; //Get parameter from URL
     url = new URL(url);
     var userId = url.searchParams.get("userId");
-    authorsProjectsService.viewProfile(userId).then(function(resp){
+    authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
         vm.userProfile = resp.data.data;
         homeService.getReviewRequest().then(function(resp){
           vm.reviewRequests = resp.data.data;
+        });
+        authorsProjectsService.viewProfile(userId).then(function(resp){
+          vm.authorProfile = resp.data.data;
         });
         authorsProjectsService.getAuthorCollaborators(userId).then(function(resp){
           vm.authorCollaborators = resp.data.collaborators;
@@ -150,27 +154,32 @@ function authorController($http, $window, authorsProjectsService, $location, use
     });
   }
 
-  function editProfile(){
-    if(vm.userProfile.socialMedia)
-      var socialMedia = {linkedin: vm.userProfile.socialMedia.linkedin? vm.userProfile.socialMedia.linkedin: '', academia:vm.userProfile.socialMedia.academia ? vm.userProfile.socialMedia.academia : '', facebook:vm.userProfile.socialMedia.facebook? vm.userProfile.socialMedia.facebook : '', instagram:vm.userProfile.socialMedia.instagram ? vm.userProfile.socialMedia.instagram : ''};
+  function editProfile(currentUser){
+    var user = null;
+    if(currentUser)
+      user = vm.userProfile;
+    else 
+      user = vm.authorProfile;
+    if(user.socialMedia)
+      var socialMedia = {linkedin: user.socialMedia.linkedin? user.socialMedia.linkedin: '', academia:user.socialMedia.academia ? user.socialMedia.academia : '', facebook:user.socialMedia.facebook? user.socialMedia.facebook : '', instagram:user.socialMedia.instagram ? user.socialMedia.instagram : ''};
     else
       var socialMedia = {};
     var SM = JSON.stringify(socialMedia);
-    if(vm.userProfile.roles && vm.userProfile.roles[0] == 1)
-      var profileObj = {firstName: vm.userProfile.firstName, lastName:vm.userProfile.lastName, institution:vm.userProfile.institution, socialMedia:SM, id:vm.userProfile.id, roles:[vm.role]};
-    else var profileObj = {firstName: vm.userProfile.firstName, lastName:vm.userProfile.lastName, institution:vm.userProfile.institution, socialMedia:SM, id:vm.userProfile.id};
+    if(vm.role && vm.userProfile.roles && vm.userProfile.roles[0].id == 1)
+      var profileObj = {firstName: user.firstName, lastName:user.lastName, institution:user.institution, socialMedia:SM, id:user.id, roles:[parseInt(vm.role)]};
+    else var profileObj = {firstName: user.firstName, lastName:user.lastName, institution:user.institution, socialMedia:SM, id:user.id};
 
     authorsProjectsService.editProfile(profileObj).then(function(resp){
-      vm.userProfile = resp.data.user;
+      user = resp.data.user;
       if(resp.data.success)
         alert("Your profile is successfuly updated");
     });
   }
 
-  function editArticle(articleId){
-    var articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: collIds, ongoing:vm.onGoing, reviewers:revIds};
-    authorsProjectsService.editArticle(articleObj, articleId).then(function(resp){
-
+  function editArticle(articleObj){ 
+    authorsProjectsService.editArticle({reLink:articleObj.reLink}, articleObj.id).then(function(resp){
+      if(resp.data.status == 'success')
+        alert('Repository URL is updated');
     });
   }
   initPage();

@@ -101,8 +101,8 @@
 				                         <p ng-bind="request.message"></p>
 				                      </h3>
 				                      <div style="clear:both">
-				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
-				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
+				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
+                        				<button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
 				                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject' || request.message=='Accepted participation' || request.message=='Rejected participation' || request.type=='message'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
 				                      </div>
 				                      <span style="display: contents;" ng-bind="request.created_at"></span>
@@ -167,11 +167,11 @@
 							<div class="col-lg-6">
 								<div class="main-ws-sec">
 									<div class="user-tab-sec">
-										<h3 ng-bind="ctrl.userProfile.firstName + ' ' +ctrl.userProfile.lastName"></h3>
+										<h3 ng-bind="ctrl.authorProfile.firstName + ' ' +ctrl.authorProfile.lastName"></h3>
 										
 										<div class="star-descp">
-											<span ng-bind="ctrl.userProfile.email"></span>
-											<span ng-bind="ctrl.userProfile.institution"></span>
+											<span ng-bind="ctrl.authorProfile.email"></span>
+											<span ng-bind="ctrl.authorProfile.institution"></span>
 										</div><!--star-descp end-->
 										<div class="tab-feed">
 											<ul>
@@ -181,12 +181,12 @@
 														<span>Feed</span>
 													</a>
 												</li>
-												<li data-tab="info-dd" ng-if="ctrl.userProfile.roles[0]==1">
+												<!-- <li data-tab="info-dd" ng-if="ctrl.userProfile.roles[0].title=='admin'">
 													<a href="#" title="">
 														<img src="images/ic2.png" alt="">
 														<span>Edit Role</span>
 													</a>
-												</li>
+												</li> -->
 											</ul>
 										</div><!-- tab-feed end-->
 									</div><!--user-tab-sec end-->
@@ -196,9 +196,9 @@
 												<div class="post_topbar">
 													<div class="usy-dt">
 														<div class="usy-name">
-															<h3 ng-bind="ctrl.userProfile.firstName+ ' ' + ctrl.userProfile.lastName"></h3>
-							                              <span ng-bind="ctrl.userProfile.email"></span>
-							                              <span ng-bind="ctrl.userProfile.institution"></span>
+															<h3 ng-bind="ctrl.authorProfile.firstName+ ' ' + ctrl.authorProfile.lastName"></h3>
+							                              <span ng-bind="ctrl.authorProfile.email"></span>
+							                              <span ng-bind="ctrl.authorProfile.institution"></span>
 							                              <div style="font-weight: bold">Collaborators: </div>
 															<span ng-repeat="col in ctrl.authorCollaborators">
 																<span ng-bind="col.firstName + ' ' + col.lastName"></span>,&nbsp
@@ -217,33 +217,34 @@
 													</div> -->
 												</div>
 												<div class="job_descp">
-						                            <span ng-repeat="art in ctrl.userProfile.articles">
+						                            <span ng-repeat="art in ctrl.authorProfile.articles">
 						                              <div style="font-weight: bold">Article Name:</div> <li class="zoom" ng-click="ctrl.openGoogleScholar(art.title)" ng-bind="art.title"></li>
 						                              <div style="font-weight: bold">BR Name: </div>
 						                              <p ng-bind="art.br.name"></p>
 						                              <span>Country</span>
 						                              <p ng-bind="art.br.country"></p>
 												    </span>
-												    <div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.linkedin"><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 30px;" alt=""><a href="ctrl.userProfile.socialMedia.linkedin" ng-bind="ctrl.userProfile.socialMedia.linkedin"></a></div>
+												    <div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.authorProfile.socialMedia.linkedin"><img src="images/linkedinlogo.jpg" style="width: 30px;margin-right: 30px;" alt=""><a href="{{ctrl.authorProfile.socialMedia.linkedin}}" target="_blank" ng-bind="ctrl.authorProfile.socialMedia.linkedin"></a></div>
 
-													<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.academia"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt=""><a href="ctrl.userProfile.socialMedia.academia" ng-bind="ctrl.userProfile.socialMedia.academia"></a></div>
+													<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.authorProfile.socialMedia.academia"><img style="width:60px; margin-right:5px" src="images/academialogo.png" alt=""><a href="{{ctrl.authorProfile.socialMedia.academia}}" target="_blank" ng-bind="ctrl.authorProfile.socialMedia.academia"></a></div>
 
-													<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.facebook"><img style="margin:0 30px 0 3px;width:30px;" src="images/fblogo.png" alt=""><a href="ctrl.userProfile.socialMedia.facebook" ng-bind="ctrl.userProfile.socialMedia.facebook"></a></div>
+													<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.authorProfile.socialMedia.facebook"><img style="margin:0 30px 0 3px;width:30px;" src="images/fblogo.png" alt=""><a href="{{ctrl.authorProfile.socialMedia.facebook}}" target="_blank" ng-bind="ctrl.authorProfile.socialMedia.facebook"></a></div>
 
-													<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.userProfile.socialMedia.instagram"><img src="images/instalogo.png" style="width:35px;margin-right:30px" alt=""><a href="ctrl.userProfile.socialMedia.instagram" ng-bind="ctrl.userProfile.socialMedia.instagram"></a></div>
+													<div style="clear:both;margin-bottom: 10px;" ng-if="ctrl.authorProfile.socialMedia.instagram"><img src="images/instalogo.png" style="width:35px;margin-right:30px" alt=""><a href="{{ctrl.authorProfile.socialMedia.instagram}}" target="_blank" ng-bind="ctrl.authorProfile.socialMedia.instagram"></a></div>
                         						</div>
 											</div><!--post-bar end-->
 											<!--process-comm end-->
 										</div><!--posts-section end-->
 									</div><!--product-feed-tab end-->
-									<div class="product-feed-tab" id="info-dd">
+									<div style= "margin-bottom: 20px;" ng-if="ctrl.userProfile.roles[0].title == 'admin'">
+										<input type="radio" name="role" ng-model="ctrl.role" value="1"> Admin
+										<input type="radio" name="role" ng-model="ctrl.role" value="2"> Manager
+										<input type="radio" name="role" ng-model="ctrl.role" value="3"> Researcher
+									</div>
+									<button ng-if="ctrl.userProfile.roles[0].title == 'admin'" style="padding:5px" ng-click="ctrl.editProfile(false)" class="follow">Update Role</button>
+									<div class="product-feed-tab">
 										<div class="user-profile-ov">
-											<div style= "margin-bottom: 20px;" ng-if="ctrl.userProfile.roles[0] == 1">
-												<input type="radio" name="role" ng-model="ctrl.role" value="1"> Admin
-												<input type="radio" name="role" ng-model="ctrl.role" value="2"> Manager
-												<input type="radio" name="role" ng-model="ctrl.role" value="3"> Researcher
-											</div>
-											<button style="padding:5px" ng-click="ctrl.editProfile()" class="follow">Update Role</button>
+											
 										</div><!--user-profile-ov end-->
 									</div><!--product-feed-tab end-->
 								</div><!--main-ws-sec end-->

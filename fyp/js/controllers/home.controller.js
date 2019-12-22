@@ -31,6 +31,7 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.addCollabs = [];
 	vm.addRevs = [];
 	vm.loadAuthors = false;
+	vm.re3DataLink = '';
 
 	vm.createPost = createPost;
 	vm.getBrIds = getBrIds;
@@ -169,7 +170,7 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		});
 	}
 
-	function requestOnGoingArticle(articleName, userId, articleIdf){
+	function requestOnGoingArticle(articleName, userId, articleId){
 		var requetObj = {toUser: userId, message:'request to participate your article \''+articleName+'\'', status:3, type:"ongoing", articleId:articleId};
 		authorsProjectsService.sendMessages(requetObj).then(function(resp){
 			if(resp.data.status == 'success')
@@ -214,7 +215,7 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		for(var i =0; i<vm.addRevs.length; i++){
 			revIds[i]=vm.addRevs[i].id;
 		}
-		vm.articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: collIds, ongoing:vm.onGoing, reviewers:revIds};
+		vm.articleObj = {citation:vm.citation, brId:vm.brId, keywords: vm.keywords, date: vm.year, title:vm.title, collaborators: collIds, ongoing:vm.onGoing, reviewers:revIds, reLink:vm.re3DataLink};
 		homeService.createPost(vm.articleObj).then(function(resp){
 			if(resp.data.status=='success'){
 				for(var i =0; i<revIds.length; i++){

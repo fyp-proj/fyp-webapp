@@ -103,8 +103,8 @@
 				                         <p ng-bind="request.message"></p>
 				                      </h3>
 				                      <div style="clear:both">
-				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
-				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
+				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
+                        				<button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
 				                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject' || request.message=='Accepted participation' || request.message=='Rejected participation' || request.type=='message'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
 				                      </div>
 				                      <span style="display: contents;" ng-bind="request.created_at"></span>

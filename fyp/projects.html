@@ -99,8 +99,8 @@
                          				<p ng-bind="request.message"></p>
                       				</h3>
 				                      <div style="clear:both">
-				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
-				                        <button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
+				                        <button class="follow" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(true, request.id, request.articleId, request.type)">Accept</button>
+                        				<button class="hire" ng-if="request.message!='accept' && request.message!='reject' && request.type!='message' && request.message!='Accepted participation' && request.message!='Rejected participation'" ng-click="ctrl.updateRequest(false, request.id, request.articleId, request.type)">Reject</button>
 				                        <button class="follow" ng-if="request.message=='accept' || request.message=='reject' || request.message=='Accepted participation' || request.message=='Rejected participation' || request.type=='message'" ng-click="ctrl.deleteNotif(request.id)">Well received</button>
 				                      </div>
 				                      <span style="display: contents;" ng-bind="request.created_at"></span>
@@ -208,15 +208,15 @@
 																<div class="job_descp" style="margin-top: 10px;">
 					                        <a>BR Country: <p ng-bind="article.br.country"></p></a>
 					                        <a>BR Name: <p ng-bind="article.br.name"></p></a>
-					                        <div ng-if="article.reLink">Re3Data link: <a style="cursor:pointer" href="article.reLink"
+					                        <div ng-if="article.reLink">Repository URL: <a style="cursor:pointer" target="_blank" href="{{article.reLink}}" 
 					                        	ng-bind="article.reLink"></a></div>
 				                        	<div ng-if="article.reviewing[0]" style="float:right">  
 										    	<p style="color:#FF0000"> This article is in review of '{{article.reviewing[0].firstName}} {{article.reviewing[0].lastName}}'</p>
 										    </div>
 					                    </div>
-					                    <button ng-if="!ctrl.showRe3 && ctrl.userProfile.roles[0]==1" class="hire"  style="padding:5px" ng-click="ctrl.showRe3 = true">Add Re3data Link</button>
-					                    <input style="width:400px" ng-if="ctrl.showRe3 && ctrl.userProfile.roles[0]==1" value="" ng-model="ctrl.re3data" placeholder="Re3data Link" />
-					                    <button class="hire"  style="width:60px;padding:5px;" ng-if="ctrl.showRe3 && ctrl.userProfile.roles[0]==1" ng-click="ctrl.editArticle(article)" >Add</button>
+					                    <button ng-init="article.showRe3 = false" ng-if="!article.showRe3 && ctrl.userProfile.roles[0].title=='admin'" class="hire"  style="padding:5px" ng-click="article.showRe3 = true">Add/Edit Repository URL</button>
+					                    <input style="width:400px" ng-if="article.showRe3 && ctrl.userProfile.roles[0].title=='admin'" value="" ng-model="article.reLink" placeholder="Repository URL" />
+					                    <button class="hire"  style="width:60px;padding:5px;" ng-if="article.showRe3 && ctrl.userProfile.roles[0].title=='admin'" ng-click="ctrl.editArticle(article)" >Add</button>
 										</div><!--post-bar end-->
 										<div class="process-comm" ng-if="ctrl.loadArticles">
 											<div class="spinner">

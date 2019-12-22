@@ -278,10 +278,7 @@ function authorsArticlesController($http, $window, authorsProjectsService, $loca
   }
 
   function editArticle(articleObj){
-    articleObj.reviewers = vm.userProfile.id;
-    if(vm.re3data)
-      articleObj.reLink = vm.re3data ;
-    authorsProjectsService.editArticle(articleObj, articleObj.id).then(function(resp){
+    authorsProjectsService.editArticle({reLink:articleObj.reLink}, articleObj.id).then(function(resp){
 
     });
   }
