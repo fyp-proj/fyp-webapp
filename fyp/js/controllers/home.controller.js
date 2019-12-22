@@ -32,6 +32,7 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 	vm.addRevs = [];
 	vm.loadAuthors = false;
 	vm.re3DataLink = '';
+	vm.showWarning = false;
 
 	vm.createPost = createPost;
 	vm.getBrIds = getBrIds;
@@ -61,6 +62,10 @@ function homeController($http, $window, authorsProjectsService, $location, homeS
 		vm.accountUserId = localStorage.getItem("userId");
 		authorsProjectsService.viewProfile(vm.accountUserId).then(function(resp){
         	vm.userProfile = resp.data.data;
+        	if(vm.userProfile.roles[0].title=='researcher'){
+				document.getElementById("postButton").style.pointerEvents = 'none';
+				vm.showWarning = true;
+        	}
         	homeService.getReviewRequest().then(function(resp){
 		    	vm.reviewRequests = resp.data.data;
 	   		});
