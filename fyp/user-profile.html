@@ -167,7 +167,6 @@
 								<div class="main-ws-sec">
 									<div class="user-tab-sec">
 										<h3 ng-bind="ctrl.userProfile.firstName + ' ' +ctrl.userProfile.lastName"></h3>
-										
 										<div class="star-descp">
 											<div><span style="font-weight:bold">Email:</span><span ng-bind="ctrl.userProfile.email"></span></div>
 											<div> <span style="font-weight:bold">Institution:</span><span ng-bind="ctrl.userProfile.institution"></span></div>
@@ -201,6 +200,11 @@
 											<div class="post-bar">
 												<div class="job_descp">
 						                            <span>
+						                            	<div style="font-weight: bold; float:left">Collaborators: </div>
+														<span ng-repeat="col in art.authors">
+															<span ng-bind="col.firstName + ' ' + col.lastName"></span>,&nbsp
+														</span>
+														</div>
 						                              <div>Article Name:</div><div ng-bind="art.title"></div>
 						                              <div>BR Name: </div>
 						                              <p ng-bind="art.br.name"></p>
